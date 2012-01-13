@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="{{baseURL}}/static/css/main.css" />
+    <title>{{title}}</title>
+  </head>
+  <body> 
+    <div id="topbar">
+      <ul id="topnav">
+        <li><a href="{{baseURL}}">Pages</a></li>
+        <li><a href="{{baseURL}}/_activity">Activity</a></li>
+        <li><a href="{{baseURL}}/_help">Help</a></li>
+      </ul>
+      {{{include "duality-contrib-session/session.html"}}}
+    </div>
+    <div id="content">
+      {{{content}}}
+    </div>
+    <script type="text/javascript" src="{{baseURL}}/modules.js"></script>
+    <script type="text/javascript" src="{{baseURL}}/duality.js"></script>
+  </body>
+</html>

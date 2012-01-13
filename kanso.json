@@ -2,13 +2,18 @@
     "name": "garden-dashboard",
     "version": "0.0.1",
     "description": "Kanso app to manage your installed couchapps from a garden..",
-    "attachments": "static",
+    "attachments": ["static", "index.html"],
     "modules": "lib",
     "load": "lib/app",
     "less": {
         "compress": true,
         "compile": ["static/css/main.less"],
         "remove_from_attachments": true
+    },
+    "duality": { "base_template": "base.html" },
+    "handlebars": {
+        "all_partials": true,
+        "templates": "templates"
     },
     "dependencies": {
         "attachments": null,
@@ -20,6 +25,10 @@
         "sanitize": null,
         "datelib": "0.0.1",
         "base64": null,
-        "async": null
+        "async": null,
+        "handlebars": null,
+        "handlebars-helpers": "0.0.2",
+        "duality-handlebars": "0.0.2",
+        "duality-contrib-session-hb": ">=0.0.2"
     }
 }
