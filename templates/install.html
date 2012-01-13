@@ -3,8 +3,18 @@
     <div class="row">
       <div class="span12">
         <h1>Install request</h1>
-        <div>{{app_url}}</div>
-        <div>{{app_name}}</div>
+
+
+        <div class="alert-message block-message info">
+            <p><strong>Heads up!</strong> You are being requested to <strong>install</strong> the application <strong>{{app_name}}</strong> from {{app_url}} into your dashboard</p>
+        </div>
+
+
+        <fieldset class="form-actions">
+          <button type="submit" class="btn primary">Install</button>
+          <button type="reset" class="btn">Cancel</button>
+        </fieldset>
+
 
       </div>
       <div class="span4">

@@ -5,15 +5,22 @@
     <link rel="stylesheet" type="text/css" href="{{baseURL}}/static/css/main.css" />
     <title>{{title}}</title>
   </head>
-  <body> 
-    <div id="topbar">
-      <ul id="topnav">
-        <li><a href="{{baseURL}}">Pages</a></li>
-        <li><a href="{{baseURL}}/_activity">Activity</a></li>
-        <li><a href="{{baseURL}}/_help">Help</a></li>
-      </ul>
-      {{{include "duality-contrib-session/session.html"}}}
-    </div>
+  <body>
+
+
+    <div class="navbar navbar-static">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+              <li class="active">
+                <a href="{{baseURL}}">Home</a>
+              </li>
+              <li><a href="{{baseURL}}/_activity">Activity</a></li>
+              <li><a href="{{baseURL}}/_help">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>  
     <div id="content">
       {{{content}}}
     </div>
