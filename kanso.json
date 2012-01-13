@@ -5,9 +5,16 @@
     "attachments": "static",
     "modules": "lib",
     "load": "lib/app",
+    "less": {
+        "compress": true,
+        "compile": ["static/css/main.less"],
+        "remove_from_attachments": true
+    },
     "dependencies": {
         "attachments": null,
         "modules": null,
+        "less-precompiler": null,
+        "bootstrap": null,
         "properties": null,
         "underscore": null,
         "sanitize": null,
