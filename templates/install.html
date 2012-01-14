@@ -1,21 +1,25 @@
 <div id="secondbar">
   <div class="container">
     <div class="row">
-      <div class="span12">
-        <h1>Install request</h1>
+      <div class="span12">  
+        <h1>Install Application</h1>
 
-
-        <div class="alert-message block-message info">
-            <p><strong>Heads up!</strong> You are being requested to <strong>install</strong> the application <strong>{{app_name}}</strong> from {{app_url}} into your dashboard</p>
-        </div>
-
-
-        <fieldset class="form-actions">
-          <button type="submit" class="btn primary">Install</button>
-          <button type="reset" class="btn">Cancel</button>
-        </fieldset>
-
-
+        {{#if is_auth}}
+            <div class="alert-message block-message info">
+                <p><strong>Heads up!</strong> You are being requested to <strong>install</strong> the application <strong>{{app_name}}</strong> from {{app_url}} into your dashboard</p>
+            </div>
+            <div class="loading">
+                Loading installation information...Please wait
+            </div>
+            <fieldset class="form-actions" style="display: none">
+              <button type="submit" class="btn primary">Install</button>
+              <button type="reset" class="btn">Cancel</button>
+            </fieldset>
+        {{else}}
+            <div class="alert-message block-message warning">
+                <p>You need to login to install this app</p>
+            </div>
+        {{/if}}
       </div>
       <div class="span4">
       </div>

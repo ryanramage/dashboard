@@ -1,2 +1,23 @@
 @import "packages/bootstrap/bootstrap/lib/bootstrap.less";
 /* Now use bootstrap and less! */
+
+.thumbnail p {
+    display: none;
+}
+
+.thumbnail {
+
+    opacity:0.6;
+    filter:alpha(opacity=60); /* For IE8 and earlier */
+
+}
+
+.thumbnail:hover {
+    opacity:1;
+    border: 1px solid @linkColor;
+    cursor: pointer;
+}
+
+span.brand-colour {
+    color: green;
+}
