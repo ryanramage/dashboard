@@ -14,11 +14,11 @@
                  <span class="brand-colour">Garden</span> Dashboard
             </a>
             <ul class="nav">
-              <li class="active">
-                <a href=".">Apps</a>
+              <li class="apps active">
+                <a href="#/apps">Apps</a>
               </li>
-              <li><a href="#/Gardens">Gardens</a></li>
-              <li><a href="#/Sync">Sync</a></li>
+              <li class="gardens"><a href="#/gardens">Gardens</a></li>
+              <li class="sync"><a href="#/sync">Sync</a></li>
             </ul>
       </div>
      </div>
@@ -26,93 +26,21 @@
     <div class="container">
 
         <div class="row">
-            <div class="span9">
+            <div class="main span9">
                 
-                <div class="row">
-                    <span class="span5">
-                        <h1>Installed Apps</h1>
-                    </span>
-                </div>
-
-
-
-                <div class="row">
-                    <div class="span6">
-                         <div class="alert-message block-message warning">
-                            <a class="close" data-dismiss="alert" href="#">&times;</a>
-                            <p>You have no apps intalled. You should get some!</p>
-                            <div class="alert-actions">
-                              <a class="btn small" href="https://garden.iriscouch.com">Go to Garden Market!</a>
-                            </div>
-                         </div>
-                    </div>
-                </div>
-
-
-
-
-                <div class="row">
-                    <ul class="thumbnails">
-                      <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                      <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                        <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                        <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                        <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                        <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                        <li class="span3">
-                        <div class="thumbnail">
-                          <img src="http://placehold.it/210x150" alt="">
-                          <h5>Angry Todos</h5>
-                          <p>An awesome todo app that manages things, well, in anger...</p>
-                        </div>
-                      </li>
-                    </ul>
-                </div>
-
-
-
-
 
             </div>
             <div class="span3">
                 <h3 class="help" title="Feeds from all your applications.">Activity Feed</h3>
+
+                <ul class="feed unstyled">
+
+                </ul>
+
+
             </div>
+ 
+
         </div>
 
 
@@ -120,10 +48,13 @@
     <script type="text/javascript" src="static/js/lib/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="static/js/lib/director-1.0.7.min.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-twipsy.js"></script>
+    <script type="text/javascript" src="static/js/lib/bootstrap-popover.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-alert.js"></script>
+    <script type="text/javascript" src="static/js/lib/moment.min.js"></script>
     <script type="text/javascript" src="modules.js"></script>
     <script type="text/javascript" src="static/js/ui.js"></script>
 
 
   </body>
 </html>
+ 
