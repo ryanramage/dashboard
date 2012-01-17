@@ -157,6 +157,7 @@ function showSync() {
     $('.other').click(function() {
         $('table.platform-installs').show();
         $(this).hide();
+        return false;
     });
 }
 
