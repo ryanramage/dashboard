@@ -161,16 +161,33 @@ function showSync() {
     });
 }
 
+function userTableShow() {
+    var val = $('input:radio[name=userMode]:checked').val();
+     if (val === 'multiUser') $('.multiUser').show();
+     else $('.multiUser').hide();
+}
+
+function showSettings() {
+    show('settings')
+    userTableShow();
+    $('input:radio[name=userMode]').click(function() {
+          userTableShow();
+    });
+}
+
 var routes = {
   '/apps'   : showApps,
   '/apps/info/:db' : viewApp,
   '/markets': showMarkets,
   '/sync'   : showSync,
-  '/settings'   : function() {show('settings')}
+  '/settings'   : showSettings
 };
 
 
 var router = Router(routes).init('/apps');
+
+
+
 
 
 $(function() {
@@ -199,6 +216,8 @@ $(function() {
 
     }).twipsy({placement: 'right'});
 
+
+    
 
 //    var last_thumb;
 //    var showMenu = _.debounce(function() {
