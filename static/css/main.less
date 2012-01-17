@@ -15,6 +15,10 @@
   
 }
 
+.app a:hover {
+    text-decoration:none;
+}
+
 .thumbnail p {
     display: none;
 }
@@ -38,12 +42,23 @@
     cursor: pointer;
 }
 
+.thumbnail i {
+    float: right;
+    opacity: .3 !important;
+}
+
+.thumbnail i:hover {
+    float: right;
+    border: 1px solid #999;
+    opacity: 1 !important;
+}
+
 span.brand-colour {
     color: green;
 }
 
 ul.gardens {
-    margin-left: 20px !important;
+    margin-left: 30px !important;
 }
 
 ul.gardens li {
@@ -51,9 +66,21 @@ ul.gardens li {
 }
 
 .add-market {
-    margin: 20px 0 5px 15px;
+    margin: 20px 0 5px 30px;
 }
 
 .new-market {
     display: none;
+}
+
+
+ #garden-navigation {
+  z-index: 30000;
+  position: absolute;
+  top: 3px;
+  left: 2px;
+  width: 32px;
+  height: 32px;
+  opacity: .6;
+  display: none;
 }

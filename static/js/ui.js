@@ -15,29 +15,95 @@ function oneUrl(location) {
     return location.protocol + '//' + location.host + location.pathname;
 }
 
-
-function showApps() {
-    show('apps');    
-    var data = {};
-    data.apps = [
-        {
-            img : 'http://placehold.it/210x150',
-            name : 'Angry Todos'
-        },
-        {
-            img : 'http://placehold.it/210x150',
-            name : 'Test Runner'
-        }
-    ];
-    if (!data.apps || data.apps.length === 0) {
-        $('.message').html(handlebars.templates['no_apps_message.html']({}, {}));
-    } else {
-        $('.app').append(handlebars.templates['app_details.html'](data, {}));
-    }
+function dbRoot(location) {
+    return location.protocol + '//' + location.host + '/';
 }
 
 
-function getGardens(callback) {
+function getApps(callback) {
+    var data = {};
+    data.apps = [
+        {
+            img  : 'http://placehold.it/210x150',
+            name : 'Angry Todos',
+            db   : 'angry-todos',
+            start_url : '_design/angrytodos/_rewrite/'
+        },
+        {
+            img  : 'http://placehold.it/210x150',
+            name : 'Web Bookmarks',
+            db   : 'webmarks',
+            start_url : '_design/webmarks/_rewrite/'
+        } 
+    ];
+    var root = dbRoot(window.location);
+    data.apps = _.map(data.apps, function(row) {
+       row.start_url = root + row.db + '/' + row.start_url;
+       return row;
+    });
+    callback(data);
+}
+
+
+function showApps() {
+    show('apps');
+
+    getApps(function(data) {
+        if (!data.apps || data.apps.length === 0) {
+            $('.message').html(handlebars.templates['no_apps_message.html']({}, {}));
+            return;
+        }
+
+        $('.app').append(handlebars.templates['app_list.html'](data, {}));
+
+
+        $('ul.app .thumbnail').click(function(){
+
+            var name = $(this).data('name');
+            var link = $(this).parent().attr('href');
+            // animate the top bar, giving user context
+            
+
+            $('.navbar .nav > li > a').hide(700);
+
+            setTimeout(function(){
+                $('.navbar-inner a.brand').text(name);
+                $('#garden-navigation').show(400);
+            }, 200)
+
+            setTimeout(function() {
+                window.location = link;
+            }, 700);
+
+
+            return false;
+
+
+        });
+
+
+
+        $('ul.app .thumbnail i')
+           .twipsy({placement: 'bottom'})
+            .click(function() {
+                $('.twipsy').hide(); // seems to linger
+                var db = $(this).data('db');
+                try {
+                   router.setRoute('/apps/info/' + db);
+                } catch(e) {
+                    console.log(e);
+                }                
+                return false;
+            })
+
+
+
+
+    });
+}
+
+
+function getMarkets(callback) {
     var data = {};
     data.gardens = [
         {
@@ -55,28 +121,43 @@ function getGardens(callback) {
 }
 
 
-function showGardens() {
-    show('gardens');
-    getGardens(function(data) {
+function showMarkets() {
+    show('markets');
+    getMarkets(function(data) {
         $('ul.gardens').append(handlebars.templates['garden_details.html'](data, {}));
     })
 
     $('.add-market').click(function() {
+        $('.add-market').hide();
         $('.new-market').show(500);
     });
 
     $('.cancel').click(function() {
+        $('.add-market').show();
         $('.new-market').hide(500);
     });
 
+
 }
 
+function viewApp(dbName) {
+    $('.nav li').removeClass('active');
+    $('.nav li.apps' ).addClass('active');
+
+    var context = {
+        app_name : 'Angry Todo'
+    };
+
+    $('.main').html(handlebars.templates['app_details.html'](context, {}));
+}
 
 
 var routes = {
   '/apps'   : showApps,
-  '/gardens': showGardens,
-  '/sync'   : function() {show('sync')}
+  '/apps/info/:db' : viewApp,
+  '/markets': showMarkets,
+  '/sync'   : function() {show('sync')},
+  '/settings'   : function() {show('settings')}
 };
 
 

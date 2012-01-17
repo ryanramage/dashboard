@@ -1,0 +1,11 @@
+{{#each apps}}
+<li class="span3">
+    <a href="{{start_url}}">
+        <div class="thumbnail" data-url="{{start_url}}" data-name="{{name}}">
+          <img src="{{img}}" alt="">
+          <b>{{name}}</b>
+          <i class="cog" title="Edit application settings..." data-db="{{db}}"></i>
+        </div>
+    </a>
+</li>
+{{/each}}
