@@ -1,4 +1,3 @@
-
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
 
@@ -152,11 +151,20 @@ function viewApp(dbName) {
 }
 
 
+
+function showSync() {
+    show('sync');
+    $('.other').click(function() {
+        $('table.platform-installs').show();
+        $(this).hide();
+    });
+}
+
 var routes = {
   '/apps'   : showApps,
   '/apps/info/:db' : viewApp,
   '/markets': showMarkets,
-  '/sync'   : function() {show('sync')},
+  '/sync'   : showSync,
   '/settings'   : function() {show('settings')}
 };
 
