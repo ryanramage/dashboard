@@ -1,4 +1,42 @@
-<div class="row title">
-    <h1>Settings</h1>
-    Configure this dashboard.
-</div>
+        <div class="row title">
+            <h1>Settings</h1>
+            Configure this dashboard.
+        </div>
+
+        <form class="horizontal-form">
+            <fieldset class="control-group">
+              <label class="control-label" for="userMode">User Mode</label>
+              <div class="controls">
+                <label class="radio">
+                  <input type="radio" checked="" name="userMode" value="singleUser">
+                  Single User Mode. One login, all access.
+                </label>
+                <label class="radio">
+                  <input type="radio" name="userMode" value="multiUser">
+                  Multi User Mode. Useful for a group or corporate environment.  
+                </label>
+              </div>
+            </fieldset>
+
+        </form>
+        <div class="row multiUser">
+            <div class="offset2 span5">
+                <button class="btn small add-admin">Add Admin</button>
+                <h6>Dashboard Admins</h6>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Bob Dob</td>
+                      <td><button class="btn small danger">Delete</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+            </div>
+        </div>
