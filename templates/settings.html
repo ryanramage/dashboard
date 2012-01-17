@@ -22,18 +22,40 @@
         <div class="row multiUser">
             <div class="offset2 span5">
                 <button class="btn small add-admin">Add Admin</button>
-                <h6>Dashboard Admins</h6>
+                <h6>Admins</h6>
                 <table>
                   <thead>
                     <tr>
                       <th>User</th>
-                      <th>Actions</th>
+                      <th class="action">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>Bob Dob</td>
-                      <td><button class="btn small danger">Delete</button></td>
+                      <td class="action"><a class="delete">Delete</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+            </div>
+        </div>
+        
+        <div class="row multiUser">
+            <div class="offset2 span5">
+                <button class="btn small add-admin">Add Role</button>
+                <h6>User Roles</h6>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Role</th>
+                      <th class="action">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Everyone</td>
+                      <td class="action"><a class="delete">Delete</a></td>
                     </tr>
                   </tbody>
                 </table>
