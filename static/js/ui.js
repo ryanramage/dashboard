@@ -154,6 +154,14 @@ function viewApp(dbName) {
 
 function showSync() {
     show('sync');
+
+
+
+
+    // we need the following info to figure best option
+    //console.log(System.os);
+    //console.log(System.check_plugin('java'));
+
     $('.other').click(function() {
         $('table.platform-installs').show();
         $(this).hide();
@@ -215,28 +223,6 @@ $(function() {
        $(this).attr('title', moment(date).calendar());
 
     }).twipsy({placement: 'right'});
-
-
-    
-
-//    var last_thumb;
-//    var showMenu = _.debounce(function() {
-//        $('.app .thumbnail').popover('hide');
-//        last_thumb.popover('show');
-//    }, 1000);
-//
-//    $('.app .thumbnail')
-//        .popover({
-//            placement: 'bottom',
-//            content : '<a href="">Settings</a>',
-//            trigger : 'manual'
-//        })
-//        .mouseover(function() {
-//           last_thumb = $(this);
-//           showMenu();
-//        });
-
-
 
 }) 
 
