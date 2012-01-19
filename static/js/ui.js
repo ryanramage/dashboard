@@ -191,9 +191,103 @@ function viewApp(id) {
                     router.setRoute('/apps');
                });
             });
-
-
         });
+
+
+        function updateStatus(msg, percent, complete) {
+            $('.activity-info .bar').css('width', percent);
+            if (complete) {
+                $('.activity-info .progress').removeClass('active');
+            }
+        }
+
+
+        $('#compact-final').click(function(){
+            $('.activity-info').show();
+            updateStatus('Compacting', '50%', true);
+            $.couch.db(doc.installed.db).compact({
+               success : function(){
+                   updateStatus('Done Compact', '100%', true);
+                   setTimeout(function() {
+                       $('.activity-info').hide();
+                       var app_db = couch.use(doc.installed.db);
+                       app_db.info(function(err, data) {
+                            var nice_size = garden_urls.formatSize(data.disk_size)
+                            $('#db-size').text(nice_size);
+                       })
+
+                   }, 3000);
+                   
+               }
+            });
+        });
+
+
+        $('#clone-app-start').click(function(){
+            $('#newAppName').val(doc.dashboard_title);
+        });
+
+        $('#clone-final').click(function() {
+            $(this).parent().parent().modal('hide');
+            $('.activity-info').show();
+            updateStatus('Copying', '20%', true);
+
+
+            var replicationOptions = {
+                create_target:true
+            };
+            
+            if (! $('#copyData').is(':checked') ) {
+                replicationOptions.doc_ids = [ '_design/' + doc.doc_id ];
+            }
+
+            var app_data = $.extend(true, {}, doc);
+            delete app_data._id;
+            delete app_data._rev;
+            delete app_data.installed_text;
+
+
+            app_data.dashboard_title = $('#newAppName').val();
+
+
+            console.log(app_data);
+
+
+            $.couch.allDbs({
+                success : function(data) {
+                    var db_name = garden_urls.find_next_db_name(doc.installed.db, data);
+
+                    app_data.installed.db = db_name;
+                    app_data.installed.date = new Date().getTime();
+
+
+                    $.couch.replicate(doc.installed.db, db_name, {
+                       success : function() {
+                            current_db.saveDoc(app_data, function() {
+                                setTimeout(function() {
+                                   $('.activity-info').hide();
+
+                               }, 3000);
+                            });
+
+  
+
+
+                       }
+                    }, replicationOptions);
+                }
+            });
+
+
+
+
+
+
+
+
+            
+        })
+
 
 
     });
