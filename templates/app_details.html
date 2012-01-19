@@ -10,24 +10,24 @@
 
                 
         <div class="row title">
-            <h1>{{app_name}}</h1>
+            <h1 class="edit-title" contenteditable="true">{{dashboard_title}}</h1>
         </div>
         
         <div class="well">
             <h2>Application Info</h2>
             <dl>
                 <dt>Installed</dt>
-                <dd>1 year ago</dd>
+                <dd>{{installed_text}}</dd>
                 
                 <dt>Installed From</dt>
-                <dd><a href="https://garden.iriscouch.com">IrisCouch Garden</a>
+                <dd><a href="{{src}}">{{src}}</a>
                 
                 <dt>Application Version<dt>
-                <dd>1.2</dd>
+                <dd>{{kanso.version}}</dd>
                 
                 
                 <dt>Database Size</dt>
-                <dd>1.2 GB</dd>
+                <dd id="db-size">calculating...</dd>
                 
             </dl>
         </div>       

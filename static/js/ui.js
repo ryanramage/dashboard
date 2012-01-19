@@ -34,6 +34,7 @@ function getApps(callback) {
 
             var app_data = row.doc;
             return {
+                id   : app_data._id,
                 img  : 'http://placehold.it/210x150',
                 name : app_data.dashboard_title,
                 db   : app_data.installed.db,
@@ -87,9 +88,9 @@ function showApps() {
            .twipsy({placement: 'bottom'})
             .click(function() {
                 $('.twipsy').hide(); // seems to linger
-                var db = $(this).data('db');
+                var id = $(this).data('id');
                 try {
-                   router.setRoute('/apps/info/' + db);
+                   router.setRoute('/apps/info/' + id);
                 } catch(e) {
                     console.log(e);
                 }                
@@ -140,15 +141,34 @@ function showMarkets() {
 
 }
 
-function viewApp(dbName) {
+function viewApp(id) {
+
     $('.nav li').removeClass('active');
     $('.nav li.apps' ).addClass('active');
 
-    var context = {
-        app_name : 'Angry Todo'
-    };
 
-    $('.main').html(handlebars.templates['app_details.html'](context, {}));
+    current_db.getDoc(id, function(err, doc) {
+
+
+         doc.installed_text = moment(new Date(doc.installed.date)).calendar();
+
+        $('.main').html(handlebars.templates['app_details.html'](doc, {}));
+
+
+        $('.edit-title').blur(function() {
+            doc.dashboard_title = $(this).text();
+            current_db.saveDoc(doc, function(err, response){
+               if (err) return alert('could not save');
+               doc._rev = response.rev;
+            });
+        })
+
+
+    });
+
+
+
+    
 }
 
 
