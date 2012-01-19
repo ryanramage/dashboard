@@ -1,5 +1,7 @@
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
+var garden_urls = require('lib/garden_urls');
+var current_db = require('db').current();
 
 
 var show = function(what, context) {
@@ -20,27 +22,26 @@ function dbRoot(location) {
 
 
 function getApps(callback) {
-    var data = {};
-    data.apps = [
-        {
-            img  : 'http://placehold.it/210x150',
-            name : 'Angry Todos',
-            db   : 'angry-todos',
-            start_url : '_design/angrytodos/_rewrite/'
-        },
-        {
-            img  : 'http://placehold.it/210x150',
-            name : 'Web Bookmarks',
-            db   : 'webmarks',
-            start_url : '_design/webmarks/_rewrite/'
-        } 
-    ];
-    var root = dbRoot(window.location);
-    data.apps = _.map(data.apps, function(row) {
-       row.start_url = root + row.db + '/' + row.start_url;
-       return row;
+    
+    current_db.getView('garden-dashboard', 'by_active_install', {include_docs: true}, function(err, response) {
+        if (err) {
+            return alert(err);
+        }
+        var data = {};
+        data.apps = _.map(response.rows, function(row) {
+
+            // we should verify these by checking the db and design docs exist.
+
+            var app_data = row.doc;
+            return {
+                img  : 'http://placehold.it/210x150',
+                name : app_data.dashboard_title,
+                db   : app_data.installed.db,
+                start_url : garden_urls.get_launch_url(app_data)
+            }
+        });
+        callback(data);
     });
-    callback(data);
 }
 
 

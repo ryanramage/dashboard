@@ -2,6 +2,7 @@ var _ = require('underscore')._;
 var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
 var current_db = require('db').current();
+var async = require('async');
 
 
 $(function() {
@@ -81,13 +82,6 @@ $(function() {
     })
 
 
-    $('.success').live('click', function() {
-
-    });
-
-
-
-
 
     function copyDoc(db) {
        updateStatus('Cleaning up', '80%');
@@ -126,6 +120,7 @@ $(function() {
             date : new Date().getTime(),
             db : db_name
         }
+        app_data.dashboard_title = app_data.kanso.name;
         app_data.type = 'install';
         current_db.saveDoc(app_data, function() {
             updateStatus('Install Complete', '100%', true);
