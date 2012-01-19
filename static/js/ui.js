@@ -183,9 +183,40 @@ function showSettings() {
     });
 }
 
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+
+function installApp() {
+    $('.nav li').removeClass('active');
+    $('.nav li.apps' ).addClass('active');
+
+
+    var context = {
+        app_url : getParameterByName('app_url'),
+        app_name : getParameterByName('app_name'),
+        is_auth : true
+    };
+
+    console.log(context);
+
+    $('.main').html(handlebars.templates['install.html'](context, {}));
+}
+
+
+
 var routes = {
   '/apps'   : showApps,
   '/apps/info/:db' : viewApp,
+  '/apps/install' : installApp,
   '/markets': showMarkets,
   '/sync'   : showSync,
   '/settings'   : showSettings

@@ -1,28 +1,32 @@
-<div id="secondbar">
-  <div class="container">
-    <div class="row">
-      <div class="span12">  
-        <h1>Install Application</h1>
 
-        {{#if is_auth}}
-            <div class="alert-message block-message info">
-                <p><strong>Heads up!</strong> You are being requested to <strong>install</strong> the application <strong>{{app_name}}</strong> from {{app_url}} into your dashboard</p>
-            </div>
-            <div class="loading">
-                Loading installation information...Please wait
-            </div>
-            <fieldset class="form-actions" style="display: none">
-              <button type="submit" class="btn primary">Install</button>
-              <button type="reset" class="btn">Cancel</button>
-            </fieldset>
-        {{else}}
-            <div class="alert-message block-message warning">
-                <p>You need to login to install this app</p>
-            </div>
-        {{/if}}
-      </div>
-      <div class="span4">
-      </div>
-    </div>
-  </div>
+
+<div class="row">
+    <ul class="breadcrumb">
+      <li>
+        <a href="./#/apps">Apps</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        Install Application
+      </li>
+    </ul>
+    <h1>Install Application</h1>
+</div>
+
+
+<div class="row install-row">
+
+    {{#if is_auth}}
+        <div class="alert-message block-message warning">
+            <p><strong>Heads up!</strong> You are being requested to <strong>install</strong> an application. Make sure you trust the information below.</p>
+        </div>
+        <div class="loading" data-appurl="{{app_url}}">
+            Loading installation information...Please wait
+        </div>
+
+    {{else}}
+        <div class="alert-message block-message warning">
+            <p>You need to login as an admin to install this app</p>
+        </div>
+    {{/if}}
+ 
 </div>
