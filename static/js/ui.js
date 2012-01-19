@@ -1,7 +1,8 @@
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
-var current_db = require('db').current();
+var couch = require('db');
+var current_db = couch.current();
 
 
 var show = function(what, context) {
@@ -155,6 +156,16 @@ function viewApp(id) {
         $('.main').html(handlebars.templates['app_details.html'](doc, {}));
 
 
+        $('.form-actions .btn').twipsy({placement: 'bottom'});
+
+        var app_db = couch.use(doc.installed.db);
+        app_db.info(function(err, data) {
+            var nice_size = garden_urls.formatSize(data.disk_size)
+            $('#db-size').text(nice_size);
+        })
+
+
+
         $('.edit-title').blur(function() {
             doc.dashboard_title = $(this).text();
             current_db.saveDoc(doc, function(err, response){
@@ -162,6 +173,27 @@ function viewApp(id) {
                doc._rev = response.rev;
             });
         })
+
+
+        $('.modal .cancel').click(function() {
+            console.log('click');
+            $(this).parent().parent().modal('hide');
+        });
+
+        $('#delete-final').click(function() {
+            $(this).parent().parent().modal('hide');
+            couch.deleteDatabase(doc.installed.db, function(err, response) {
+               if (err) {
+                   return alert('Could not delete db');
+               }
+               current_db.removeDoc(doc, function(err, response) {
+                    // go to the dashboard.
+                    router.setRoute('/apps');
+               });
+            });
+
+
+        });
 
 
     });
