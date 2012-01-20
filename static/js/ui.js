@@ -1,8 +1,10 @@
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
+var userType = require('lib/userType');
 var couch = require('db');
 var current_db = couch.current();
+var session = require('session');
 
 
 var show = function(what, context) {
@@ -358,6 +360,20 @@ function installApp() {
     $('.main').html(handlebars.templates['install.html'](context, {}));
 }
 
+var isAdmin = false;
+
+function checkSession() {
+    session.info(function(err, info) {
+        isAdmin = userType.isAdmin(info);
+    });
+}
+
+function afterRender() {
+    console.log('is admin', isAdmin);
+    if (!isAdmin) {
+        $('.admin-only').hide();
+    }
+}
 
 
 var routes = {
@@ -370,7 +386,12 @@ var routes = {
 };
 
 
-var router = Router(routes).init('/apps');
+var router = Router(routes);
+router.configure({
+   before : checkSession,
+   on: afterRender
+});
+router.init('/apps');
 
 
 
