@@ -113,6 +113,9 @@ function showApps() {
 
             .mousedown(function(event) {
                 var me = $(this);
+                me.css('margin-top', '3px');
+                me.css('margin-left', '3px');
+
                 longclickinfo.id = $(this).data('id');
                 longclickinfo.start = new Date().getTime();
                 longclickinfo.showMsg = setTimeout(function(){
@@ -121,7 +124,9 @@ function showApps() {
             })
             .mousemove(function(){
                 cancelLongClick();
-                $(this).twipsy('hide');
+                $(this).twipsy('hide')
+                  .css('margin-top', '0')
+                  .css('margin-left', '0');
             })
             .mouseup(function(event){
                 var id = $(this).data('id');
@@ -138,6 +143,8 @@ function showApps() {
                     $(this).twipsy('hide');
                     cancelLongClick();
                 }
+                me.css('margin-top', '0');
+                me.css('margin-left', '0');
             });
 
         // End of crazy 
