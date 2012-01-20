@@ -58,6 +58,20 @@ function showApps() {
             return;
         }
 
+        // get any stored ordering
+        var order = amplify.store('dashboardOrder');
+        if (order) {
+            var max = 1000;
+            var current_past_end = data.apps.length + 1;
+            data.apps = _.sortBy(data.apps, function(app) {
+                var dash_order = current_past_end++;
+                if (order[app.id]) dash_order = order[app.id];
+
+                dash_order = max - dash_order;
+                return dash_order;
+            });
+        }
+
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
 
 
@@ -143,13 +157,23 @@ function showApps() {
                     $(this).twipsy('hide');
                     cancelLongClick();
                 }
-                me.css('margin-top', '0');
-                me.css('margin-left', '0');
+                $(this).css('margin-top', '0');
+                $(this).css('margin-left', '0');
             });
 
         // End of crazy 
 
-        $('ul.app').sortable();
+        $('ul.app').sortable({
+            update: function() {
+                var order = {};
+                var count = 0;
+                $('.thumbnail').each(function() {
+                    var id = $(this).data('id');
+                    order[id] = count++;
+                });
+                amplify.store('dashboardOrder', order);
+            }
+        });
         $('ul.app').disableSelection();
 
 
