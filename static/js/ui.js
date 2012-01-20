@@ -151,6 +151,8 @@ function viewApp(id) {
 
 
          doc.installed_text = moment(new Date(doc.installed.date)).calendar();
+         doc.icon_src = garden_urls.bestIcon96(doc);
+
 
         $('.main').html(handlebars.templates['app_details.html'](doc, {}));
 
@@ -159,7 +161,7 @@ function viewApp(id) {
 
         var app_db = couch.use(doc.installed.db);
         app_db.info(function(err, data) {
-            var nice_size = garden_urls.formatSize(data.disk_size)
+            var nice_size = garden_urls.formatSize(data.disk_size);
             $('#db-size').text(nice_size);
         })
 
