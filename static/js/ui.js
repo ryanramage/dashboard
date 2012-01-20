@@ -105,21 +105,36 @@ function showApps() {
 
 
 function getMarkets(callback) {
-    var data = {};
-    data.gardens = [
-        {
-            name : "IrisCouch Market",
-            url : "https://garden.iriscouch.com"
-        }
-    ];
+    current_db.getView('dashboard', 'by_markets', {include_docs: true}, function(err, response) {
+        if (err) return alert('cant load markets');
+        var data = {};
+        data.gardens =  _.map(response.rows, function(row) {
+            return {
+                name : row.key,
+                url : row.value
+            }
+        });
+        data.gardens.push({
+            type: 'market',
+            name : "Kanso Garden",
+            url : "http://garden.iriscouch.com/garden/_design/garden/_rewrite/"
+        });
+
+        data = addDashboardUrl(data);
+        callback(data);
+    });
+}
+
+
+function addDashboardUrl(data) {
     var dashboardUrl = oneUrl(window.location);
     data.gardens = _.map(data.gardens, function(row) {
        row.url = row.url + '?dashboard=' + dashboardUrl;
        return row;
     });
-
-    callback(data);
+    return data;
 }
+
 
 
 function showMarkets() {
@@ -131,14 +146,38 @@ function showMarkets() {
     $('.add-market').click(function() {
         $('.add-market').hide();
         $('.new-market').show(500);
+        return false;
     });
 
     $('.cancel').click(function() {
         $('.add-market').show();
         $('.new-market').hide(500);
+        return false;
     });
 
+    $('#add-market-final').click(function() {
 
+        var market = {
+            type : 'market',
+            url : $('#market-url').val(),
+            name : $('#market-name').val()
+        }
+
+        current_db.saveDoc(market, function(err, response) {
+            if (err) return alert('could not save');
+            var d = {
+                gardens : [market]
+            }
+            d = addDashboardUrl(d);
+            $('ul.gardens').append(handlebars.templates['garden_details.html'](d, {}));
+
+            $('.add-market').show();
+            $('.new-market').hide(500);
+        })
+
+        return false;
+
+    });
 }
 
 function viewApp(id) {
