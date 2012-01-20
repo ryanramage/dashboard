@@ -38,7 +38,7 @@ function getApps(callback) {
             var app_data = row.doc;
             return {
                 id   : app_data._id,
-                img  : garden_urls.bestDashboardImage(app_data),
+                img  : garden_urls.bestIcon128(app_data),
                 name : app_data.dashboard_title,
                 db   : app_data.installed.db,
                 start_url : garden_urls.get_launch_url(app_data)
@@ -61,43 +61,89 @@ function showApps() {
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
 
 
-        $('ul.app .thumbnail').click(function(){
-
-            var name = $(this).data('name');
-            var link = $(this).parent().attr('href');
-            // animate the top bar, giving user context
-            
-
-            $('.navbar .nav > li > a').hide(200);
-             $('.navbar-inner a.brand').html('&nbsp;');
 
 
-            setTimeout(function() {
-                window.location = link;
-            }, 300);
+        //  begin crazy stuff to get a short click (with animation) and a long click to settings
+        $('ul.app .thumbnail').click(function(event){
+
+            try {
+                var id = $(this).data('id');
+                var now = new Date().getTime();
+                if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) return;
+
+                var name = $(this).data('name');
+                var link = $(this).parent().attr('href');
+                // animate the top bar, giving user context
 
 
+                $('.navbar .nav > li > a').hide(200);
+                 $('.navbar-inner a.brand').html('&nbsp;');
+
+
+                setTimeout(function() {
+                    window.location = link;
+                }, 300);
+
+            } catch (e) {
+                console.log(e);
+            }
             return false;
 
 
         });
 
+        var longclickinfo = {
 
-
-        $('ul.app .thumbnail i')
-           .twipsy({placement: 'bottom'})
-            .click(function() {
-                $('.twipsy').hide(); // seems to linger
-                var id = $(this).data('id');
-                try {
-                   router.setRoute('/apps/info/' + id);
-                } catch(e) {
-                    console.log(e);
-                }                
-                return false;
+        }
+        function cancelLongClick() {
+            longclickinfo.id = null;
+            longclickinfo.start = null;
+            if (longclickinfo.showMsg)
+                clearTimeout(longclickinfo.showMsg);
+        }
+        
+        $('ul.app a').click(function() {
+            return false;
+        });
+        $('ul.app .thumbnail')
+            .popover({
+                trigger: 'manual',
+                content: 'Enter Settings...'
             })
 
+            .mousedown(function(event) {
+                var me = $(this);
+                longclickinfo.id = $(this).data('id');
+                longclickinfo.start = new Date().getTime();
+                longclickinfo.showMsg = setTimeout(function(){
+                    me.popover('show');
+                }, 900)
+            })
+            .mousemove(function(){
+                cancelLongClick();
+                $(this).popover('hide');
+            })
+            .mouseup(function(event){
+                var id = $(this).data('id');
+                var now = new Date().getTime();
+                if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) {
+                    try {
+                        event.stopPropagation();
+                       $(this).popover('hide');
+                       router.setRoute('/apps/info/' + id);
+                       
+                    } catch(e) {
+                    }
+                } else {
+                    $(this).popover('hide');
+                    cancelLongClick();
+                }
+            });
 
+        // End of crazy 
+
+        $('ul.app').sortable();
+        $('ul.app').disableSelection();
 
 
     });

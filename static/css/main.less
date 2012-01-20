@@ -26,9 +26,6 @@
     text-decoration:none;
 }
 
-.thumbnail p {
-    display: none;
-}
 
 .thumbnail .settings {
     position: relative;
@@ -40,25 +37,42 @@
 
     opacity:0.6;
     filter:alpha(opacity=60); /* For IE8 and earlier */
+    border: none !important;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    border-image: initial;
+
 
 }
 
 .thumbnail:hover {
     opacity:1;
-    border: 1px solid @linkColor;
     cursor: pointer;
 }
 
-.thumbnail i {
-    float: right;
-    opacity: .3 !important;
+.thumbnail .app-name {
+    width: 100%;
+    text-align: center;
 }
 
-.thumbnail i:hover {
+.thumbnail .badges {
     float: right;
-    border: 1px solid #999;
-    opacity: 1 !important;
+    margin-right: 50px;
 }
+
+.thumbnail i {
+    display:none;
+}
+
+.thumbnail > img {
+    margin-left: 46px;
+}
+
+
 
 span.brand-colour {
     color: @brand-accent-2;
