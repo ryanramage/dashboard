@@ -26,7 +26,7 @@ function dbRoot(location) {
 
 function getApps(callback) {
     
-    current_db.getView('garden-dashboard', 'by_active_install', {include_docs: true}, function(err, response) {
+    current_db.getView('dashboard', 'by_active_install', {include_docs: true}, function(err, response) {
         if (err) {
             return alert(err);
         }
@@ -38,7 +38,7 @@ function getApps(callback) {
             var app_data = row.doc;
             return {
                 id   : app_data._id,
-                img  : 'http://placehold.it/210x150',
+                img  : garden_urls.bestDashboardImage(app_data),
                 name : app_data.dashboard_title,
                 db   : app_data.installed.db,
                 start_url : garden_urls.get_launch_url(app_data)
@@ -58,7 +58,7 @@ function showApps() {
             return;
         }
 
-        $('.app').append(handlebars.templates['app_list.html'](data, {}));
+        $('.app').html(handlebars.templates['app_list.html'](data, {}));
 
 
         $('ul.app .thumbnail').click(function(){
@@ -68,16 +68,13 @@ function showApps() {
             // animate the top bar, giving user context
             
 
-            $('.navbar .nav > li > a').hide(700);
+            $('.navbar .nav > li > a').hide(200);
+             $('.navbar-inner a.brand').html('&nbsp;');
 
-            setTimeout(function(){
-                $('.navbar-inner a.brand').text(name);
-                $('#garden-navigation').show(400);
-            }, 200)
 
             setTimeout(function() {
                 window.location = link;
-            }, 700);
+            }, 300);
 
 
             return false;
@@ -252,9 +249,6 @@ function viewApp(id) {
             app_data.dashboard_title = $('#newAppName').val();
 
 
-            console.log(app_data);
-
-
             $.couch.allDbs({
                 success : function(data) {
                     var db_name = garden_urls.find_next_db_name(doc.installed.db, data);
@@ -369,9 +363,8 @@ function checkSession() {
 }
 
 function afterRender() {
-    console.log('is admin', isAdmin);
     if (!isAdmin) {
-        $('.admin-only').hide();
+       // $('.admin-only').hide();
     }
 }
 
@@ -398,6 +391,7 @@ router.init('/apps');
 
 
 $(function() {
+    $('#garden-navigation').twipsy({placement: 'right'});
     $('.help').twipsy({placement: 'bottom'});
 
 

@@ -120,7 +120,7 @@ $(function() {
             date : new Date().getTime(),
             db : db_name
         }
-        app_data.dashboard_title = app_data.kanso.name;
+        app_data.dashboard_title = app_data.kanso.config.name;
         app_data.type = 'install';
         current_db.saveDoc(app_data, function() {
             updateStatus('Install Complete', '100%', true);

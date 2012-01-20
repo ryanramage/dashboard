@@ -1,5 +1,5 @@
 {
-    "name": "garden-dashboard",
+    "name": "dashboard",
     "version": "0.0.1",
     "description": "Kanso app to manage your installed couchapps from a garden..",
     "attachments": ["static", "index.html"],
