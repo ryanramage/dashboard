@@ -106,9 +106,9 @@ function showApps() {
             return false;
         });
         $('ul.app .thumbnail')
-            .popover({
+            .twipsy({
                 trigger: 'manual',
-                content: 'Enter Settings...'
+                title: 'Enter Settings...'
             })
 
             .mousedown(function(event) {
@@ -116,12 +116,12 @@ function showApps() {
                 longclickinfo.id = $(this).data('id');
                 longclickinfo.start = new Date().getTime();
                 longclickinfo.showMsg = setTimeout(function(){
-                    me.popover('show');
+                    me.twipsy('show');
                 }, 900)
             })
             .mousemove(function(){
                 cancelLongClick();
-                $(this).popover('hide');
+                $(this).twipsy('hide');
             })
             .mouseup(function(event){
                 var id = $(this).data('id');
@@ -129,13 +129,13 @@ function showApps() {
                 if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) {
                     try {
                         event.stopPropagation();
-                       $(this).popover('hide');
+                       $(this).twipsy('hide');
                        router.setRoute('/apps/info/' + id);
                        
                     } catch(e) {
                     }
                 } else {
-                    $(this).popover('hide');
+                    $(this).twipsy('hide');
                     cancelLongClick();
                 }
             });
