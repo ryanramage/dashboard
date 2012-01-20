@@ -60,17 +60,20 @@ function showApps() {
 
         // get any stored ordering
         var order = amplify.store('dashboardOrder');
+
         if (order) {
             var max = 1000;
             var current_past_end = data.apps.length + 1;
             data.apps = _.sortBy(data.apps, function(app) {
                 var dash_order = current_past_end++;
-                if (order[app.id]) dash_order = order[app.id];
+                if (order[app.id] && order[app.id] >= 0) dash_order = order[app.id];
+                dash_order =  dash_order;
 
-                dash_order = max - dash_order;
                 return dash_order;
             });
         }
+
+
 
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
 
@@ -127,9 +130,7 @@ function showApps() {
 
             .mousedown(function(event) {
                 var me = $(this);
-                me.css('margin-top', '3px');
-                me.css('margin-left', '3px');
-
+                me.find('img').addClass('thumbnail-mouse-down');
                 longclickinfo.id = $(this).data('id');
                 longclickinfo.start = new Date().getTime();
                 longclickinfo.showMsg = setTimeout(function(){
@@ -139,8 +140,7 @@ function showApps() {
             .mousemove(function(){
                 cancelLongClick();
                 $(this).twipsy('hide')
-                  .css('margin-top', '0')
-                  .css('margin-left', '0');
+                  .find('img').removeClass('thumbnail-mouse-down');
             })
             .mouseup(function(event){
                 var id = $(this).data('id');
@@ -157,8 +157,7 @@ function showApps() {
                     $(this).twipsy('hide');
                     cancelLongClick();
                 }
-                $(this).css('margin-top', '0');
-                $(this).css('margin-left', '0');
+                $(this).find(img).removeClass('thumbnail-mouse-down');
             });
 
         // End of crazy 
@@ -166,7 +165,7 @@ function showApps() {
         $('ul.app').sortable({
             update: function() {
                 var order = {};
-                var count = 0;
+                var count = 1;
                 $('.thumbnail').each(function() {
                     var id = $(this).data('id');
                     order[id] = count++;
