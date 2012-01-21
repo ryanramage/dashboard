@@ -90,16 +90,10 @@ function showApps() {
 
                 var name = $(this).data('name');
                 var link = $(this).parent().attr('href');
-                // animate the top bar, giving user context
 
 
-                $('.navbar .nav > li > a').hide(200);
-                 $('.navbar-inner a.brand').html('&nbsp;');
+                window.location = link;
 
-
-                setTimeout(function() {
-                    window.location = link;
-                }, 300);
 
             } catch (e) {
                 console.log(e);
@@ -122,43 +116,43 @@ function showApps() {
         $('ul.app a').click(function() {
             return false;
         });
-        $('ul.app .thumbnail')
-            .twipsy({
-                trigger: 'manual',
-                title: 'Enter Settings...'
-            })
+        var thumbnail = $('ul.app .thumbnail')
+        thumbnail.twipsy({
+            trigger: 'manual',
+            title: 'Enter Settings...'
+        });
 
-            .mousedown(function(event) {
-                var me = $(this);
-                me.find('img').addClass('thumbnail-mouse-down');
-                longclickinfo.id = $(this).data('id');
-                longclickinfo.start = new Date().getTime();
-                longclickinfo.showMsg = setTimeout(function(){
-                    me.twipsy('show');
-                }, 900)
-            })
-            .mousemove(function(){
-                cancelLongClick();
-                $(this).twipsy('hide')
-                  .find('img').removeClass('thumbnail-mouse-down');
-            })
-            .mouseup(function(event){
-                var id = $(this).data('id');
-                var now = new Date().getTime();
-                if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) {
-                    try {
-                        event.stopPropagation();
-                       $(this).twipsy('hide');
-                       router.setRoute('/apps/info/' + id);
-                       
-                    } catch(e) {
-                    }
-                } else {
-                    $(this).twipsy('hide');
-                    cancelLongClick();
+        thumbnail.bind('mousedown touchstart', function(event) {
+            var me = $(this);
+            me.find('img').addClass('thumbnail-mouse-down');
+            longclickinfo.id = $(this).data('id');
+            longclickinfo.start = new Date().getTime();
+            longclickinfo.showMsg = setTimeout(function(){
+                me.twipsy('show');
+            }, 900)
+        });
+        thumbnail.bind('mousemove touchmove', function(){
+            cancelLongClick();
+            $(this).twipsy('hide')
+              .find('img').removeClass('thumbnail-mouse-down');
+        });
+        thumbnail.bind('mouseup touchend', function(event){
+            var id = $(this).data('id');
+            var now = new Date().getTime();
+            if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) {
+                try {
+                    event.stopPropagation();
+                   $(this).twipsy('hide');
+                   router.setRoute('/apps/info/' + id);
+
+                } catch(e) {
                 }
-                $(this).find(img).removeClass('thumbnail-mouse-down');
-            });
+            } else {
+                $(this).twipsy('hide');
+                cancelLongClick();
+            }
+            $(this).find('img').removeClass('thumbnail-mouse-down');
+        });
 
         // End of crazy 
 
@@ -216,7 +210,7 @@ function addDashboardUrl(data) {
 function showMarkets() {
     show('markets');
     getMarkets(function(data) {
-        $('ul.gardens').append(handlebars.templates['garden_details.html'](data, {}));
+        $('ul.gardens').html(handlebars.templates['garden_details.html'](data, {}));
     })
 
     $('.add-market').click(function() {
@@ -534,6 +528,77 @@ $(function() {
 
     }).twipsy({placement: 'right'});
 
-}) 
+});
 
-       
+
+
+
+/*
+ * Content-Type:text/javascript
+ *
+ * A bridge between iPad and iPhone touch events and jquery draggable,
+ * sortable etc. mouse interactions.
+ * @author Oleg Slobodskoi
+ *
+ * modified by John Hardy to use with any touch device
+ * fixed breakage caused by jquery.ui so that mouseHandled internal flag is reset
+ * before each touchStart event
+ *
+ */
+(function( $ ) {
+
+    $.support.touch = typeof Touch === 'object';
+
+    if (!$.support.touch) {
+        return;
+    }
+
+    var proto =  $.ui.mouse.prototype,
+    _mouseInit = proto._mouseInit;
+
+    $.extend( proto, {
+        _mouseInit: function() {
+            this.element
+            .bind( "touchstart." + this.widgetName, $.proxy( this, "_touchStart" ) );
+            _mouseInit.apply( this, arguments );
+        },
+
+        _touchStart: function( event ) {
+            if ( event.originalEvent.targetTouches.length != 1 ) {
+                return false;
+            }
+
+            this.element
+            .bind( "touchmove." + this.widgetName, $.proxy( this, "_touchMove" ) )
+            .bind( "touchend." + this.widgetName, $.proxy( this, "_touchEnd" ) );
+
+            this._modifyEvent( event );
+
+            $( document ).trigger($.Event("mouseup")); //reset mouseHandled flag in ui.mouse
+            this._mouseDown( event );
+
+            return false;
+        },
+
+        _touchMove: function( event ) {
+            this._modifyEvent( event );
+            this._mouseMove( event );
+        },
+
+        _touchEnd: function( event ) {
+            this.element
+            .unbind( "touchmove." + this.widgetName )
+            .unbind( "touchend." + this.widgetName );
+            this._mouseUp( event );
+        },
+
+        _modifyEvent: function( event ) {
+            event.which = 1;
+            var target = event.originalEvent.targetTouches[0];
+            event.pageX = target.clientX;
+            event.pageY = target.clientY;
+        }
+
+    });
+
+})( jQuery );
