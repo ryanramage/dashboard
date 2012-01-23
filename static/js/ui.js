@@ -5,6 +5,7 @@ var userType = require('lib/userType');
 var couch = require('db');
 var current_db = couch.current();
 var session = require('session');
+var users = require("users");
 
 
 var show = function(what, context) {
@@ -285,10 +286,7 @@ function viewApp(id) {
         })
 
 
-        $('.modal .cancel').click(function() {
-            console.log('click');
-            $(this).parent().parent().modal('hide');
-        });
+
 
         $('#delete-final').click(function() {
             $(this).parent().parent().modal('hide');
@@ -298,7 +296,7 @@ function viewApp(id) {
                }
                current_db.removeDoc(doc, function(err, response) {
                     // go to the dashboard.
-                    router.setRoute('/apps');
+                    router.setRoute('/settings');
                });
             });
         });
@@ -423,18 +421,76 @@ function showSync() {
     });
 }
 
-function userTableShow() {
-    var val = $('input:radio[name=userMode]:checked').val();
-     if (val === 'multiUser') $('.multiUser').show();
-     else $('.multiUser').hide();
+
+
+function getAdmins(callback) {
+    $.couch.config({
+        success : function(data) {
+              var keys = [];
+              for(var i in data) if (data.hasOwnProperty(i)){
+                keys.push(i);
+              }
+
+            if (callback) callback(keys);
+
+        },
+        error : function() {
+            console.log('not an admin');
+        }
+    }, 'admins')
+
 }
+
+
+
+function getRoles(callback) {
+    current_db.getView('dashboard', 'by_roles', {include_docs : 'true'}, function(err, response) {
+        console.log(response);
+        callback(response.rows);
+    });
+}
+
+function getUsers(callback) {
+    users.list(function (err, list) {
+        if (err) {
+           
+        }
+        else  callback(list);
+    });
+}
+
+
+
 
 function showSettings() {
     show('settings')
-    userTableShow();
-    $('input:radio[name=userMode]').click(function() {
-          userTableShow();
+    getApps(function(data) {
+         $('.app-list-condensed').html(handlebars.templates['settings-apps.html'](data, {}));
     });
+
+    getAdmins(function(admins) {
+        var data = {
+            admins : admins
+        };
+        $('.admin-list').html(handlebars.templates['admins.html'](data, {}));
+    });
+
+    getRoles(function(roles) {
+        var data = {
+            roles : roles
+        }
+        $('.role-list').html(handlebars.templates['roles.html'](data, {}));
+    });
+
+
+
+
+
+    getUsers(function(data) {
+
+    });
+
+
 }
 
 function getParameterByName(name) {
@@ -464,6 +520,7 @@ function installApp() {
 
     $('.main').html(handlebars.templates['install.html'](context, {}));
 }
+
 
 var isAdmin = false;
 
@@ -506,6 +563,10 @@ $(function() {
     $('.help').twipsy({placement: 'bottom'});
 
 
+    $('.modal .cancel').live('click', function() {
+        $(this).parent().parent().modal('hide');
+    });
+
     //query feeds
     var data = [];
     data.feeds = [
@@ -517,6 +578,70 @@ $(function() {
 
     ]
     $('.feed').append(handlebars.templates['feed_details.html'](data, {}));
+
+
+
+    $('.admin-delete').live('click', function(){
+       var me = $(this);
+       var name = $(this).data('name');
+
+       users.delete(name, function(err) {
+           if (err) return alert('could not delete.' + err);
+           me.closest('tr').remove();
+       });
+
+    });
+
+    $('#add-admin-final').live('click', function(){
+        var username = $('#admin-name').val();
+        var password = $('#admin-password').val();
+        $('#add-admin-dialog').modal('hide');
+        users.create(username, password,{roles : ['_admin']}, function(err) {
+            if(err) return alert('Cant create admin');
+            // admin created
+            var data = {
+                admins : [username]
+            };
+            $('.admin-list').append(handlebars.templates['admins.html'](data, {}));
+            $('#admin-name').val('');
+            $('#admin-password').val('');
+
+        })
+    });
+
+
+    $('#add-role-final').live('click', function() {
+        var role = {
+            type : 'role',
+            name : $('#role-name').val()
+        };
+        $('#add-role-dialog').modal('hide');
+        current_db.saveDoc(role, function(err, reponse) {
+            role.key = role.name; // to keep the template rigt
+            var data = {
+                roles : [role]
+            };
+            $('.role-list').append(handlebars.templates['roles.html'](data, {}));
+            $('#role-name').val('');
+        });
+    });
+
+
+    $('.role-delete').live('click', function() {
+       var me = $(this);
+       var toDelete = {
+           _id : $(this).data('id'),
+           _rev : $(this).data('rev')
+       };
+       current_db.removeDoc(toDelete, function(err, response) {
+            me.closest('tr').remove();
+       });
+       
+       
+
+    });
+
+
 
 
     $('.timeago').each(function() {
@@ -532,73 +657,3 @@ $(function() {
 
 
 
-
-/*
- * Content-Type:text/javascript
- *
- * A bridge between iPad and iPhone touch events and jquery draggable,
- * sortable etc. mouse interactions.
- * @author Oleg Slobodskoi
- *
- * modified by John Hardy to use with any touch device
- * fixed breakage caused by jquery.ui so that mouseHandled internal flag is reset
- * before each touchStart event
- *
- */
-(function( $ ) {
-
-    $.support.touch = typeof Touch === 'object';
-
-    if (!$.support.touch) {
-        return;
-    }
-
-    var proto =  $.ui.mouse.prototype,
-    _mouseInit = proto._mouseInit;
-
-    $.extend( proto, {
-        _mouseInit: function() {
-            this.element
-            .bind( "touchstart." + this.widgetName, $.proxy( this, "_touchStart" ) );
-            _mouseInit.apply( this, arguments );
-        },
-
-        _touchStart: function( event ) {
-            if ( event.originalEvent.targetTouches.length != 1 ) {
-                return false;
-            }
-
-            this.element
-            .bind( "touchmove." + this.widgetName, $.proxy( this, "_touchMove" ) )
-            .bind( "touchend." + this.widgetName, $.proxy( this, "_touchEnd" ) );
-
-            this._modifyEvent( event );
-
-            $( document ).trigger($.Event("mouseup")); //reset mouseHandled flag in ui.mouse
-            this._mouseDown( event );
-
-            return false;
-        },
-
-        _touchMove: function( event ) {
-            this._modifyEvent( event );
-            this._mouseMove( event );
-        },
-
-        _touchEnd: function( event ) {
-            this.element
-            .unbind( "touchmove." + this.widgetName )
-            .unbind( "touchend." + this.widgetName );
-            this._mouseUp( event );
-        },
-
-        _modifyEvent: function( event ) {
-            event.which = 1;
-            var target = event.originalEvent.targetTouches[0];
-            event.pageX = target.clientX;
-            event.pageY = target.clientY;
-        }
-
-    });
-
-})( jQuery );
