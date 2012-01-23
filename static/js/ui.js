@@ -463,32 +463,39 @@ function getUsers(callback) {
 
 
 function showSettings() {
-    show('settings')
-    getApps(function(data) {
-         $('.app-list-condensed').html(handlebars.templates['settings-apps.html'](data, {}));
+
+    session.info(function(err, info) {
+        isAdmin = userType.isAdmin(info);
+        show('settings', {isAdmin : isAdmin});
+
+        if (!isAdmin) return;
+        getApps(function(data) {
+             $('.app-list-condensed').html(handlebars.templates['settings-apps.html'](data, {}));
+        });
+
+        getAdmins(function(admins) {
+            var data = {
+                admins : admins
+            };
+            $('.admin-list').html(handlebars.templates['admins.html'](data, {}));
+        });
+
+        getRoles(function(roles) {
+            var data = {
+                roles : roles
+            }
+            $('.role-list').html(handlebars.templates['roles.html'](data, {}));
+        });
+
+
+
+
+
+        getUsers(function(data) {
+
+        });
     });
 
-    getAdmins(function(admins) {
-        var data = {
-            admins : admins
-        };
-        $('.admin-list').html(handlebars.templates['admins.html'](data, {}));
-    });
-
-    getRoles(function(roles) {
-        var data = {
-            roles : roles
-        }
-        $('.role-list').html(handlebars.templates['roles.html'](data, {}));
-    });
-
-
-
-
-
-    getUsers(function(data) {
-
-    });
 
 
 }
@@ -522,18 +529,23 @@ function installApp() {
 }
 
 
-var isAdmin = false;
 
 function checkSession() {
-    session.info(function(err, info) {
-        isAdmin = userType.isAdmin(info);
-    });
+
 }
 
 function afterRender() {
-    if (!isAdmin) {
-       // $('.admin-only').hide();
-    }
+
+
+    session.info(function(err, info) {
+        var isAdmin = userType.isAdmin(info);
+        if (!isAdmin) {
+            $('.admin-only').hide();
+        } else {
+            $('.admin-only').show();
+        }
+    });    
+
 }
 
 

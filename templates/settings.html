@@ -3,6 +3,13 @@
             Configure this dashboard.
         </div>
 
+        {{#unless isAdmin}}
+            <div class="alert-message warning">
+              <p>You need to be an admin to view/edit this section.</p>
+            </div>
+
+        {{/unless}}
+        {{#if isAdmin}}
 
         <div class="tabbable">
           <ul class="nav tabs">
@@ -113,3 +120,5 @@
         <button class="btn cancel">Cancel</button>
     </div>
 </div>
+
+        {{/if}}
