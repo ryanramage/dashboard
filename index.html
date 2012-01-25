@@ -32,6 +32,41 @@
                     <i class="download-alt"></i>
                 </a>
             </div>
+            
+            <div id="session" class="loggedin">
+
+                
+              <span class="username">ryan</span>
+
+              <ul class="actions">
+
+                  <li class="logout"><a href="#">Logout</a></li>
+
+              </ul>
+              <div id="login_dropdown" style="display: none">
+                <form id="login_form" action="" method="POST">
+                  <div class="general_errors"></div>
+                  <div class="username field">
+                    <label for="login_form_name">Username</label>
+                    <input id="login_form_name" name="name" type="text">
+                    <div class="errors"></div>
+                  </div>
+                  <div class="password field">
+                    <label for="login_form_password">Password</label>
+                    <input id="login_form_password" name="password" type="password">
+                    <div class="errors"></div>
+                  </div>
+                  <div class="clear spinner" style="display: none;"></div>
+                  <div class="actions">
+                    <input type="submit" id="login_form_login" value="Login">
+                    <input type="button" id="login_form_cancel" value="Cancel">
+                  </div>
+                  <div class="clear"></div>
+                </form>
+              </div>
+            </div>
+
+
       </div>
      </div>
     </div>
