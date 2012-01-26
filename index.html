@@ -8,10 +8,6 @@
   </head>
   <body>
 
-    <a id="garden-navigation" title="Garden Dashboard" href="/dashboard/_design/dashboard/_rewrite/">
-        <img src="static/img/kanso_icon_20.png" />
-    </a>
-
     <div class="navbar navbar-static">
       <div class="navbar-inner">
         <div class="container">
@@ -27,46 +23,23 @@
               <li class="sync"><a href="#/sync">Sync</a></li>
               <li class="settings admin-only"><a href="#/settings">Settings</a></li>
             </ul>
-            <div class="pull-right">
-                <a  href="./install" class="btn info small install-app-header help admin-only" title="Install new App">
-                    <i class="download-alt"></i>
-                </a>
-            </div>
-            
-            <div id="session" class="loggedin">
-
-                
-              <span class="username">ryan</span>
-
-              <ul class="actions">
-
-                  <li class="logout"><a href="#">Logout</a></li>
-
-              </ul>
-              <div id="login_dropdown" style="display: none">
-                <form id="login_form" action="" method="POST">
-                  <div class="general_errors"></div>
-                  <div class="username field">
-                    <label for="login_form_name">Username</label>
-                    <input id="login_form_name" name="name" type="text">
-                    <div class="errors"></div>
-                  </div>
-                  <div class="password field">
-                    <label for="login_form_password">Password</label>
-                    <input id="login_form_password" name="password" type="password">
-                    <div class="errors"></div>
-                  </div>
-                  <div class="clear spinner" style="display: none;"></div>
-                  <div class="actions">
-                    <input type="submit" id="login_form_login" value="Login">
-                    <input type="button" id="login_form_cancel" value="Cancel">
-                  </div>
-                  <div class="clear"></div>
-                </form>
-              </div>
+            <div class="pull-right seperator">
+                <a  href="/dashboard/_design/dashboard/_rewrite/" class="help home-icon"  title="Garden Dashboard" ></a>
             </div>
 
 
+            <ul class="pull-right nav">
+                <li class="login"  style="display: none;"><a href="#/login">Login</a></li>
+                <li class="dropdown user" style="display: none;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="username">&nbsp;</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                       <li class="logout"><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
       </div>
      </div>
     </div>
@@ -105,6 +78,7 @@
     <script type="text/javascript" src="static/js/lib/bootstrap-alert.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-modal.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="static/js/lib/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="static/js/lib/moment.min.js"></script>
     <script type="text/javascript" src="static/js/lib/System.js"></script>
     <script type="text/javascript" src="modules.js"></script>

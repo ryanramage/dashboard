@@ -529,23 +529,60 @@ function installApp() {
 }
 
 
+function showLogin() {
+    show('login');
 
-function checkSession() {
+    $('#login-btn').click(function() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        console.log('calling login', username, password);
+        session.login(username, password, function (err, info) {
+            if (err) {
+                console.log(err);
+            } else {
 
+                //lame but, we can only get admin names for this.
+                afterRender(function() {
+                    router.setRoute('/apps');
+                });
+            }
+        });
+    });
+    return false;
 }
 
-function afterRender() {
 
 
-    session.info(function(err, info) {
+
+function adjustUIforUser(info, callback) {
         var isAdmin = userType.isAdmin(info);
         if (!isAdmin) {
             $('.admin-only').hide();
         } else {
             $('.admin-only').show();
         }
-    });    
 
+        var isUser = userType.isUser(info);
+        if (isUser) {
+            $('.user').show();
+            $('.username').text(userType.getUsername(info));
+            $('.login').hide();
+        } else {
+            $('.user').hide();
+            $('.login').show();
+        }
+        if (callback) callback();
+
+
+}
+
+
+
+function afterRender(callback) {
+
+    session.info(function(err, info) {
+        adjustUIforUser(info, callback);
+    });
 }
 
 
@@ -555,13 +592,13 @@ var routes = {
   '/apps/install' : installApp,
   '/markets': showMarkets,
   '/sync'   : showSync,
-  '/settings'   : showSettings
+  '/settings'   : showSettings,
+  '/login' : showLogin
 };
 
 
 var router = Router(routes);
 router.configure({
-   before : checkSession,
    on: afterRender
 });
 router.init('/apps');
@@ -648,11 +685,16 @@ $(function() {
        current_db.removeDoc(toDelete, function(err, response) {
             me.closest('tr').remove();
        });
-       
-       
-
     });
 
+    $('.logout').live('click', function() {
+        session.logout(function(err){
+            if (err) return alert('There was a problem logging out');
+            adjustUIforUser({});
+        });
+
+
+    });
 
 
 
