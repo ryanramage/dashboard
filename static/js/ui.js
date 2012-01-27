@@ -538,7 +538,11 @@ function showLogin() {
         console.log('calling login', username, password);
         session.login(username, password, function (err, info) {
             if (err) {
-                console.log(err);
+                var warning = $('.warning');
+                    warning.show()
+                    warning.find('strong').text(err.error);
+                    warning.find('span').text(err.reason);
+                    $('#password').val('');
             } else {
 
                 //lame but, we can only get admin names for this.
@@ -547,8 +551,9 @@ function showLogin() {
                 });
             }
         });
+        return false;
     });
-    return false;
+    
 }
 
 
