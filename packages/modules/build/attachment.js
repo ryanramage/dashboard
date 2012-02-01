@@ -38,7 +38,6 @@ module.exports = function (root, path, settings, doc, callback) {
     }
 
     if (settings.modules_attachment === false) {
-        delete doc._modules;
         return callback(null, doc);
     }
 
@@ -46,8 +45,6 @@ module.exports = function (root, path, settings, doc, callback) {
     for (var k in doc._modules) {
         wrapped_modules += modules.wrap(k, utils.getPropertyPath(doc, k));
     }
-
-    delete doc._modules;
 
     fs.readFile(__dirname + '/bootstrap.js', function (err, content) {
         if (err) {
