@@ -3,9 +3,77 @@ var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
 var current_db = require('db').current();
 var async = require('async');
-
+var session = require('session');
+var users = require("users");
+var userType = require('lib/userType');
 
 $(function() {
+
+
+    function getMarkets(callback) {
+        current_db.getView('dashboard', 'by_markets', {include_docs: true}, function(err, response) {
+            if (err) return alert('cant load markets');
+            var data = {};
+            data.gardens =  _.map(response.rows, function(row) {
+                return {
+                    name : row.key,
+                    url : row.value
+                }
+            });
+            data.gardens.push({
+                type: 'market',
+                name : "Kanso Market",
+                url : "http://garden.iriscouch.com/garden/_design/garden/_rewrite/"
+            });
+
+            data = addDashboardUrl(data);
+            callback(data);
+        });
+    }
+
+    function showMarkets() {
+        getMarkets(function(data) {
+            $('ul.gardens').html(handlebars.templates['garden_details.html'](data, {}));
+        })
+
+        $('.add-market').click(function() {
+            $('.add-market').hide();
+            $('.new-market').show(500);
+            return false;
+        });
+
+        $('.cancel').click(function() {
+            $('.add-market').show();
+            $('.new-market').hide(500);
+            return false;
+        });
+
+        $('#add-market-final').click(function() {
+
+            var market = {
+                type : 'market',
+                url : $('#market-url').val(),
+                name : $('#market-name').val()
+            }
+
+            current_db.saveDoc(market, function(err, response) {
+                if (err) return alert('could not save');
+                var d = {
+                    gardens : [market]
+                }
+                d = addDashboardUrl(d);
+                $('ul.gardens').append(handlebars.templates['garden_details.html'](d, {}));
+
+                $('.add-market').show();
+                $('.new-market').hide(500);
+            })
+
+            return false;
+
+        });
+    }
+
+    
 
     function errorLoadingInfo() {
         $('.loading').html(handlebars.templates['install_app_error.html']({}, {}));
@@ -18,33 +86,41 @@ $(function() {
     var db_name;
     var app_data;
 
+    if (appurl) {
+        $.ajax({
+            url : app_json_url + "?callback=?",
+            dataType : 'json',
+            jsonp : true,
+            success : function(data) {
+                app_data = data;
+                try {
+                    app_data.src = appurl
+                    $('.loading').html(handlebars.templates['install_app_info.html'](app_data, {}));
+                    // check if this db has been taken
+                    $.couch.allDbs({
+                        success : function(data) {
+                            db_name = garden_urls.find_next_db_name(app_data.doc_id, data);
+                            $('.form-actions').show();
+                        }
+                    });
 
-    $.ajax({
-        url : app_json_url + "?callback=?",
-        dataType : 'json',
-        jsonp : true,
-        success : function(data) {
-            app_data = data;
-            try {
-                app_data.src = appurl
-                $('.loading').html(handlebars.templates['install_app_info.html'](app_data, {}));
-                // check if this db has been taken
-                $.couch.allDbs({
-                    success : function(data) {
-                        db_name = garden_urls.find_next_db_name(app_data.doc_id, data);
-                        $('.form-actions').show();
-                    }
-                });
 
-
-            } catch(e) {
+                } catch(e) {
+                    errorLoadingInfo();
+                }
+            },
+            error : function() {
                 errorLoadingInfo();
             }
-        },
-        error : function() {
-            errorLoadingInfo();
-        }
+        });
+    }
+    session.info(function(err, info) {
+        adjustUIforUser(info);
     });
+
+
+
+    showMarkets();
 
 
     function errorInstalling(){
