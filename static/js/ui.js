@@ -200,6 +200,10 @@ function viewApp(id) {
 
 
 
+        session.info(function(err, info) {
+            adjustUIforUser(info);
+        });
+
         $('.edit-title').blur(function() {
             doc.dashboard_title = $(this).text();
             current_db.saveDoc(doc, function(err, response){
