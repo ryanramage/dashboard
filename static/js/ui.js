@@ -70,7 +70,10 @@ function showApps() {
 
 
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
-
+        // this is to handle apps that we dont have permissions to
+        $('.thumbnail img').error(function() {
+            $(this).closest('li').remove();
+        });
 
 
 
@@ -599,6 +602,10 @@ $(function() {
             me.closest('tr').remove();
        });
     });
+
+
+
+
 
 
 
