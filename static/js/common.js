@@ -40,6 +40,32 @@ function adjustUIforUser(info, callback) {
 }
 
 
+function getDBSecurity(dbName, callback) {
+    $.couch.db(dbName).getDbProperty("_security", {
+      success: function(r) {
+          callback(null, r);
+      }
+  });
+}
+
+
+function addDBReaderRole(dbName, role, callback) {
+  getDBSecurity(dbName, function(err, sec) {
+      console.log(sec);
+      if (!sec.admins) {
+          sec = {"admins":{"names":[],"roles":[]},"members":{"names":[],"roles":[]}};
+      }
+
+      sec.members.roles.push(role);
+      $.couch.db(dbName).setDbProperty("_security", sec, {
+          success : function() {
+              callback(null);
+          }
+      });
+  });
+}
+
+
 
 $(function() {
     $('#garden-navigation').twipsy({placement: 'right'});

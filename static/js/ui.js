@@ -3,7 +3,7 @@ var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
 var userType = require('lib/userType');
 var couch = require('db');
-var current_db = couch.current();
+var current_db = couch.use('_db');
 var session = require('session');
 var users = require("users");
 
@@ -296,10 +296,15 @@ function viewApp(id) {
                     $.couch.replicate(doc.installed.db, db_name, {
                        success : function() {
                             current_db.saveDoc(app_data, function() {
-                                setTimeout(function() {
-                                   $('.activity-info').hide();
+                                
+                                addDBReaderRole(db_name, '_admin', function(err) {
+                                    setTimeout(function() {
+                                       $('.activity-info').hide();
 
-                               }, 3000);
+                                   }, 3000);
+                                })
+
+
                             });
 
   

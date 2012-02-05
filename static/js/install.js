@@ -1,7 +1,7 @@
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
-var current_db = require('db').current();
+var current_db = require('db').use('_db');
 var async = require('async');
 var session = require('session');
 var users = require("users");
@@ -191,7 +191,7 @@ $(function() {
     }
 
     function saveAppDetails() {
-        updateStatus('Recording Install', '98%');
+        updateStatus('Recording Install', '95%');
         app_data.installed  = {
             date : new Date().getTime(),
             db : db_name
@@ -199,16 +199,23 @@ $(function() {
         app_data.dashboard_title = app_data.kanso.config.name;
         app_data.type = 'install';
         current_db.saveDoc(app_data, function() {
-            updateStatus('Install Complete', '100%', true);
+            updateStatus('Setting security', '98%', true);
+            setSecurityToAdmins(app_data);
+        });
+    }
 
+
+    function setSecurityToAdmins(app_data) {
+        addDBReaderRole(db_name, '_admin', function(err) {
+            updateStatus('Install Complete', '100%', true);
             var link = garden_urls.get_launch_url(app_data);
 
             $('.success')
                 .attr('href', link)
                 .show();
-
         });
     }
+
 
 
 });
