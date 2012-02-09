@@ -196,24 +196,48 @@ $(function() {
             date : new Date().getTime(),
             db : db_name
         }
-        app_data.dashboard_title = app_data.kanso.config.name;
+        app_data.dashboard_title = db_name;
         app_data.type = 'install';
         current_db.saveDoc(app_data, function() {
             updateStatus('Setting security', '98%', true);
             setSecurityToAdmins(app_data);
+            
         });
     }
 
 
     function setSecurityToAdmins(app_data) {
         addDBReaderRole(db_name, '_admin', function(err) {
-            updateStatus('Install Complete', '100%', true);
-            var link = garden_urls.get_launch_url(app_data);
 
-            $('.success')
-                .attr('href', link)
+            addRewriteRules(app_data, function(err) {
+                updateStatus('Install Complete', '100%', true);
+                var link = garden_urls.get_launch_url(app_data);
+
+                $('.success')
+                    .attr('href', link)
                 .show();
+            });
+
+
+
         });
+    }
+
+
+    function addRewriteRules (app_data, callback) {
+
+        if (app_data.kanso.config.legacy_mode) {
+
+        } else {
+            var safe_name = garden_urls.user_app_name_to_safe_url(db_name); // we have to use the app db name because unique
+
+            $.post('/_db/_design/dashboard/_update/modifyAppRewrites/_design/dashboard?db=' + db_name + '&ddoc=' + app_data.doc_id + '&new_name=' + safe_name, function(result) {
+                callback(null, result);
+            });
+        }
+
+
+
     }
 
 

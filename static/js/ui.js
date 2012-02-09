@@ -208,10 +208,20 @@ function viewApp(id) {
         });
 
         $('.edit-title').blur(function() {
+            var prev_name = garden_urls.user_app_name_to_safe_url(doc.dashboard_title);
             doc.dashboard_title = $(this).text();
             current_db.saveDoc(doc, function(err, response){
                if (err) return alert('could not save');
                doc._rev = response.rev;
+
+               // update the rewrites
+                var safe_name = garden_urls.user_app_name_to_safe_url(doc.dashboard_title);
+
+                $.post('/_db/_design/dashboard/_update/modifyAppRewrites/_design/dashboard?db=' + doc.installed.db + '&ddoc=' + doc.doc_id + '&new_name=' + safe_name + '&prev_name=' + prev_name, function(result) {
+                    //callback(null, result);
+                })
+
+
             });
         })
 
