@@ -1,7 +1,7 @@
 /*!
  * Bootstrap @VERSION
  *
- * Copyright 2011 Twitter, Inc
+ * Copyright 2012 Twitter, Inc
  * Licensed under the Apache License v2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,9 +18,12 @@
 
 // Grid system and page structure
 @import "scaffolding.less";
+@import "grid.less";
+@import "layouts.less";
 
 // Base CSS
 @import "type.less";
+@import "code.less";
 @import "forms.less";
 @import "tables.less";
 
@@ -32,14 +35,15 @@
 @import "close.less";
 
 // Components: Nav
-@import "navbar.less";
 @import "navs.less";
+@import "navbar.less";
 @import "breadcrumbs.less";
 @import "pagination.less";
+@import "pager.less";
 
 // Components: Popovers
 @import "modals.less";
-@import "twipsy.less";
+@import "tooltip.less";
 @import "popovers.less";
 
 // Components: Buttons & Alerts
@@ -51,9 +55,8 @@
 @import "thumbnails.less";
 @import "labels.less";
 @import "progress-bars.less";
+@import "accordion.less";
+@import "carousel.less";
 
 // Utility classes
 @import "utilities.less"; // Has to be last to override when necessary
-
-// Responsive
-@import "responsive.less";

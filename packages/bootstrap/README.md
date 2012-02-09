@@ -75,6 +75,20 @@ Tell Kanso to compile the less files and attach them as css:
 }
 ```
 
+### Icons
+
+Bootstrap 2.0 provides icons with the following html:
+
+```html
+<i class="chevron-left"></i>
+```
+
+To include the icons/sprite in your project, create a static file where the
+bootstrap library will find it.
+
+1. Make a folder, `mkdir -p static/css/docs/assets/img` in your kanso project
+2. Copy the sprite image into the directory, e.g. `cp packages/bootstrap/bootstrap/static/css/docs/assets/img/glyphicons-halflings-sprite.png static/css/docs/assets/img`
+
 ## Deploy
 
 Do a kanso push to make the build and deploy to your CouchDB:
