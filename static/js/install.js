@@ -1,7 +1,6 @@
 var _ = require('underscore')._;
 var handlebars = require('handlebars');
 var garden_urls = require('lib/garden_urls');
-var current_db = require('db').use('_db');
 var async = require('async');
 var session = require('session');
 var users = require("users");
@@ -11,23 +10,25 @@ $(function() {
 
 
     function getMarkets(callback) {
-        current_db.getView('dashboard', 'by_markets', {include_docs: true}, function(err, response) {
-            if (err) return alert('cant load markets');
-            var data = {};
-            data.gardens =  _.map(response.rows, function(row) {
-                return {
-                    name : row.key,
-                    url : row.value
-                }
-            });
-            data.gardens.push({
-                type: 'market',
-                name : "Kanso Market",
-                url : "http://garden.iriscouch.com/garden/_design/garden/_rewrite/"
-            });
+        $.couch.db(dashboard_db_name).view('dashboard/by_markets', {
+            include_docs: true,
+            success : function(response) {
+                var data = {};
+                data.gardens =  _.map(response.rows, function(row) {
+                    return {
+                        name : row.key,
+                        url : row.value
+                    }
+                });
+                data.gardens.push({
+                    type: 'market',
+                    name : "Kanso Market",
+                    url : "http://garden.iriscouch.com/garden/_design/garden/_rewrite/"
+                });
 
-            data = addDashboardUrl(data);
-            callback(data);
+                data = addDashboardUrl(data);
+                callback(data);
+            }
         });
     }
 
@@ -161,7 +162,7 @@ $(function() {
 
     function copyDoc(db) {
        updateStatus('Cleaning up', '80%');
-       db.copyDoc(
+        db.copyDoc(
            app_data.doc_id,
            {
                 error: errorInstalling,
@@ -183,14 +184,13 @@ $(function() {
                 var rev = jqXHR.getResponseHeader('ETag').replace(/"/gi, '');
                 console.log(rev);
                 db.removeDoc({_id : app_data.doc_id, _rev : rev}, {
-                    success :  saveAppDetails,
-                    error : saveAppDetails
+                    success :  saveAppDetails(db)
                 });
             }
         });
     }
 
-    function saveAppDetails() {
+    function saveAppDetails(db) {
         updateStatus('Recording Install', '95%');
         app_data.installed  = {
             date : new Date().getTime(),
@@ -198,10 +198,11 @@ $(function() {
         }
         app_data.dashboard_title = db_name;
         app_data.type = 'install';
-        current_db.saveDoc(app_data, function() {
-            updateStatus('Setting security', '98%', true);
-            setSecurityToAdmins(app_data);
-            
+        $.couch.db(dashboard_db_name).saveDoc(app_data, {
+            success : function() {
+                updateStatus('Setting security', '98%', true);
+                setSecurityToAdmins(app_data);
+            }
         });
     }
 
@@ -231,7 +232,7 @@ $(function() {
         } else {
             var safe_name = garden_urls.user_app_name_to_safe_url(db_name); // we have to use the app db name because unique
 
-            $.post('/_db/_design/dashboard/_update/modifyAppRewrites/_design/dashboard?db=' + db_name + '&ddoc=' + app_data.doc_id + '&new_name=' + safe_name, function(result) {
+            $.post('./_db/_design/dashboard/_update/modifyAppRewrites/_design/dashboard?db=' + db_name + '&ddoc=' + app_data.doc_id + '&new_name=' + safe_name, function(result) {
                 callback(null, result);
             });
         }

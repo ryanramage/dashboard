@@ -1,4 +1,7 @@
+var dashboard_db_name = 'dashboard';
 jQuery.couch.urlPrefix = '_couch';
+
+
 
 function oneUrl(location) {
     return location.protocol + '//' + location.host ;
