@@ -85,8 +85,13 @@ $(function() {
             if (err) return alert('There was a problem logging out');
             adjustUIforUser({});
         });
-
-
     });
+
+    // version info
+    $.getJSON("./_info",  function(data) {
+        $('footer span.version').text(data.version);
+    })
+
+
 
 });
