@@ -112,7 +112,7 @@ function showApps() {
             return false;
         });
         var thumbnail = $('ul.app .thumbnail')
-        thumbnail.twipsy({
+        thumbnail.tooltip({
             trigger: 'manual',
             title: 'Enter Settings...'
         });
@@ -123,12 +123,12 @@ function showApps() {
             longclickinfo.id = $(this).data('id');
             longclickinfo.start = new Date().getTime();
             longclickinfo.showMsg = setTimeout(function(){
-                me.twipsy('show');
+                me.tooltip('show');
             }, 900)
         });
         thumbnail.bind('mousemove touchmove', function(){
             cancelLongClick();
-            $(this).twipsy('hide')
+            $(this).tooltip('hide')
               .find('img').removeClass('thumbnail-mouse-down');
         });
         thumbnail.bind('mouseup touchend', function(event){
@@ -137,13 +137,13 @@ function showApps() {
             if (longclickinfo.id === id && (now - longclickinfo.start) > 900 ) {
                 try {
                     event.stopPropagation();
-                   $(this).twipsy('hide');
+                   $(this).tooltip('hide');
                    router.setRoute('/settings/info/' + id);
 
                 } catch(e) {
                 }
             } else {
-                $(this).twipsy('hide');
+                $(this).tooltip('hide');
                 cancelLongClick();
             }
             $(this).find('img').removeClass('thumbnail-mouse-down');
@@ -189,7 +189,7 @@ function viewApp(id) {
            $('.main').html(handlebars.templates['app_details.html'](doc, {}));
 
 
-           $('.form-actions .btn').twipsy({placement: 'bottom'});
+           $('.form-actions .btn').tooltip({placement: 'bottom'});
 
            var showDBSize = function() {
                $.couch.db(doc.installed.db).info({
@@ -642,7 +642,7 @@ $(function() {
        $(this).text(text);
        $(this).attr('title', moment(date).calendar());
 
-    }).twipsy({placement: 'right'});
+    }).tooltip({placement: 'right'});
 
 });
 

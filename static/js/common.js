@@ -73,8 +73,8 @@ function addDBReaderRole(dbName, role, callback) {
 
 
 $(function() {
-    $('#garden-navigation').twipsy({placement: 'right'});
-    $('.help').twipsy({placement: 'bottom'});
+    $('#garden-navigation').tooltip({placement: 'right'});
+    $('.help').tooltip({placement: 'bottom'});
 
 
     $('.modal .cancel').live('click', function() {
