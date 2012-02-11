@@ -13,13 +13,35 @@
 
         <div class="tabbable">
           <ul class="nav tabs">
-            <li class="active"><a href="#1" data-toggle="tab">Applications</a></li>
+             <li class="active"><a href="#0" data-toggle="tab">Updates</a></li>
+            <li><a href="#1" data-toggle="tab">Applications</a></li>
             <li><a href="#2" data-toggle="tab">Admins</a></li>
             <li><a href="#3" data-toggle="tab">Roles</a></li>
             <li><a href="#4" data-toggle="tab">Users</a></li>
           </ul>
+
+
+
           <div class="tab-content">
-            <div class="tab-pane active" id="1">
+              <div class="tab-pane active" id="0">
+                  <table class="table">
+                      <thead>
+                        <tr>
+                            <th>Name</th><th>App</th><th>Installed Version</th><th>Available Version</th><th></th>
+                        </tr>
+                      </thead>
+                      <tbody class="update-board">
+                            <tr class="dashboard">
+                                <td>Dashboard</td>
+                                <td>dashboard</td>
+                                <td class="installed-version"><img src="static/img/ajax-loader.gif" alt="loading..." /></td>
+                                <td class="available-version"><img src="static/img/ajax-loader.gif" alt="loading..." /></td>
+                                <td><div class="update-action" style="display: none;"><button class="btn primary update-run" data-loading-text="Updating..." data-complete-text="Finished!">Update</button></div> </td>
+                            </tr>
+                      </tbody>
+                  </table>
+              </div>
+            <div class="tab-pane" id="1">
 
                 <ul class="app-list-condensed">
                     

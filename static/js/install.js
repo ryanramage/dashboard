@@ -128,14 +128,7 @@ $(function() {
 
     }
 
-    function updateStatus(msg, percent, complete) {
-        console.log(msg, percent, complete);
-        $('.install-info h4').text(msg);
-        $('.install-info .bar').css('width', percent);
-        if (complete) {
-            $('.install-info .progress').removeClass('active');
-        }
-    }
+
 
 
     $('.primary').live('click', function(){
@@ -147,7 +140,7 @@ $(function() {
        $.couch.replicate(app_data.db_src, db_name, {
            success : function() {
                 var db = $.couch.db(db_name);
-                copyDoc(db);
+                copyDoc(db, db_name);
            },
            error : errorInstalling
        }, {
@@ -160,14 +153,14 @@ $(function() {
 
 
 
-    function copyDoc(db) {
+    function copyDoc(db, db_name) {
        updateStatus('Cleaning up', '80%');
         db.copyDoc(
            app_data.doc_id,
            {
                 error: errorInstalling,
                 success: function() {
-                    deleteDoc(db);
+                    deleteDoc(db, db_name);
                 }
            },
            {
@@ -176,16 +169,29 @@ $(function() {
         );
     }
 
-    function deleteDoc(db) {
+    function deleteDoc(db, db_name) {
         updateStatus('Cleaning up', '90%');
         db.headDoc(app_data.doc_id, {}, {
             success : function(data, status, jqXHR) {
                 updateStatus('Cleaning up', '95%');
                 var rev = jqXHR.getResponseHeader('ETag').replace(/"/gi, '');
-                console.log(rev);
-                db.removeDoc({_id : app_data.doc_id, _rev : rev}, {
-                    success :  saveAppDetails(db)
-                });
+
+                var purge_url = jQuery.couch.urlPrefix + '/' + db_name + '/_purge';
+                var data = {};
+                data[app_data.doc_id] = [rev];
+                $.ajax({
+                  url : purge_url,
+                  data : JSON.stringify(data),
+                  dataType : 'json',
+                  contentType: 'application/json',
+                  type: 'POST',
+                  success : function(data) {
+                      saveAppDetails(db)
+                  },
+                  error : function() {
+                      errorLoadingInfo();
+                  }
+                 });
             }
         });
     }
