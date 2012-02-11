@@ -33,7 +33,7 @@ function getApps(callback) {
                                 img  : garden_urls.bestIcon128(app_data),
                                 name : app_data.dashboard_title,
                                 db   : app_data.installed.db,
-                                start_url : garden_urls.get_launch_url(app_data)
+                                start_url : garden_urls.get_launch_url(app_data, window.location.pathname)
                             }
                         });
                         callback(data);
