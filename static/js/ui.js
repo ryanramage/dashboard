@@ -805,10 +805,19 @@ $(function() {
     }
 
     function saveAppDetails(db, app_data, callback) {
-        app_data.updated  =  new Date().getTime();
-        $.couch.db(dashboard_db_name).saveDoc(app_data, {
-            success : function() {
-                 callback();
+        var app_json_url = garden_urls.app_details_json(app_data.src);
+        $.ajax({
+            url : app_json_url + "?callback=?",
+            dataType : 'json',
+            jsonp : true,
+            success : function(data) {
+                app_data.kanso = data.kanso;
+                app_data.updated  =  new Date().getTime();
+                $.couch.db(dashboard_db_name).saveDoc(app_data, {
+                    success : function() {
+                         callback();
+                    }
+                });
             }
         });
     }
