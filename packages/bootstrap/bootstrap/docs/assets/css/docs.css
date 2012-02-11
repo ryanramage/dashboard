@@ -14,12 +14,13 @@ body {
   background-color: #fff;
   background-image: url(../img/grid-18px-masked.png);
   background-repeat: repeat-x;
+  background-position: 0 40px;
 }
 
 
 /* Tweak navbar brand link to be super sleek
 -------------------------------------------------- */
-body > .navbar-fixed .brand {
+.navbar-fixed .brand {
   padding-right: 0;
   padding-left: 0;
   margin-left: 20px;
@@ -27,16 +28,22 @@ body > .navbar-fixed .brand {
   font-weight: bold;
   color: #000;
   text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
 }
-body > .navbar-fixed .brand:hover {
+.navbar-fixed .brand:hover {
   text-decoration: none;
 }
 
 
 /* Space out sub-sections more
 -------------------------------------------------- */
+section {
+  padding-top: 60px;
+}
 .page-header {
-  margin: 45px 0 18px;
+  margin: 18px 0;
   border-bottom: 1px solid #eee;
 }
 .page-header h1 {
@@ -44,31 +51,41 @@ body > .navbar-fixed .brand:hover {
   line-height: 1;
 }
 
+/* Faded out hr */
+hr.soften {
+  height: 1px;
+  margin: 54px 0;
+  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0)); 
+  background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0)); 
+  background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0)); 
+  background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,.1), rgba(0,0,0,0)); 
+  border: 0;
+}
+
 
 /* Jumbotrons
 -------------------------------------------------- */
 .jumbotron {
   position: relative;
-  text-shadow: 0 1px 0 #fff;
 }
 .jumbotron h1 {
-  margin-right: 40%;
   margin-bottom: 9px;
-  font-size: 90px;
+  font-size: 81px;
   letter-spacing: -1px;
   line-height: 1;
 }
 .jumbotron p {
-  margin-right: 32%;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   font-size: 25px;
   font-weight: 300;
   line-height: 36px;
+  color: #333;
 }
 .jumbotron .btn-large {
   font-size: 20px;
+  font-weight: normal;
   padding: 14px 24px;
-  margin-right: 5px;
+  margin-right: 10px;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
@@ -78,9 +95,29 @@ body > .navbar-fixed .brand:hover {
   color: #999;
 }
 
+/* Masthead (docs home) */
+.masthead {
+  padding-top: 36px;
+  margin-bottom: 72px;
+}
+.masthead h1,
+.masthead p {
+  text-align: center;
+}
+.masthead h1 {
+  margin-bottom: 18px;
+}
+.masthead p {
+  margin: 0 5% 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+
 /* Benefits list in masthead */
 .benefits {
-  width: 250px;
+  display: none;
+  width: 260px;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -102,8 +139,6 @@ body > .navbar-fixed .brand:hover {
   color: #555;
 }
 .benefits span {
-  position: relative;
-  top: -2px;
   padding-right: 5px;
   color: #999;
 }
@@ -112,38 +147,111 @@ body > .navbar-fixed .brand:hover {
 ------------------------- */
 /* supporting docs pages */
 .subhead {
-  padding-bottom: 14px;
-  margin-bottom: 45px;
-  border-bottom: 3px solid #e5e5e5;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .subhead h1,
 .subhead p {
   margin-right: 0;
 }
 .subhead h1 {
-  font-size: 45px;
+  font-size: 54px;
+}
+
+/* Subnav */
+.subnav {
+  width: 100%;
+  height: 36px;
+  overflow: hidden;
+  background-color: #eeeeee; /* Old browsers */
+  background-repeat: repeat-x; /* Repeat the gradient */
+  background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* FF3.6+ */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f5f5), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+  background-image: -webkit-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* Chrome 10+,Safari 5.1+ */
+  background-image: -ms-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* IE10+ */
+  background-image: -o-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* Opera 11.10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+  background-image: linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* W3C */
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;  
+}
+.subnav .nav {
+  margin-bottom: 0;
+}
+.subnav .nav a {
+  margin: 0;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  font-size: 13px;
+  color: #777;
+  border-left: 1px solid #f5f5f5;
+  border-right: 1px solid #e5e5e5;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+.subnav .nav a:hover,
+.subnav .nav .active a {
+  background-color: transparent;
+  color: #333;
+}
+.subnav .nav .active a {
+  background-color: #e9e9e9;
+  border-right-color: #ddd;
+  border-left: 0;
+  padding-left: 13px;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+     -moz-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+          box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+}
+.subnav .nav li:first-child a {
+  border-left: 0;
+  padding-left: 12px;
+}
+.subnav .nav li:last-child a {
+  border-right: 0;
+}
+
+/* Fixed subnav on scroll, but only for 940px and up (sorry IE!) */
+@media (min-width: 940px) {
+  .subnav-fixed {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+       -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+  }
+  .subnav-fixed .nav {
+    width: 938px;
+    margin: 0 auto;
+    padding: 0 1px;
+  }
 }
 
 
 /* Quick links
 -------------------------------------------------- */
 .quick-links {
+  min-height: 30px;
   padding: 5px 20px;
-  margin: 45px 0;
+  margin: 36px 0;
   list-style: none;
   text-align: center;
-  background-color: #eee;
-  -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
-  -webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,.03);
-     -moz-box-shadow: inset 0 1px 0 rgba(0,0,0,.03);
-          box-shadow: inset 0 1px 0 rgba(0,0,0,.03);
+  overflow: hidden;
 }
 .quick-links li {
   display: inline;
   margin: 0 5px;
-  line-height: 30px;
 }
 .quick-links .divider {
   color: #999;
@@ -167,7 +275,7 @@ body > .navbar-fixed .brand:hover {
 }
 .marketing h1 {
   margin: 36px 0 27px;
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 300;
   text-align: center;
 }
@@ -181,12 +289,12 @@ body > .navbar-fixed .brand:hover {
 .marketing p {
   margin-right: 10px;
 }
-.marketing .icon {
+.marketing .bs-icon {
   float: left;
   margin: 7px 10px 0 0;
   opacity: .8;
 }
-.marketing .small-icon {
+.marketing .small-bs-icon {
   float: left;
   margin: 4px 5px 0 0;
 }
@@ -194,69 +302,41 @@ body > .navbar-fixed .brand:hover {
 
 /* Quickstart section for getting le code
 -------------------------------------------------- */
-.getting-started {
-  background-color: #f5f5f5;
-  background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#f9f9f9), to(#f5f5f5));
-  background-image: -moz-linear-gradient(#f9f9f9, #f5f5f5);
-  background-image: -ms-linear-gradient(#f9f9f9, #f5f5f5);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f9f9f9), color-stop(100%, #f5f5f5));
-  background-image: -webkit-linear-gradient(#f9f9f9, #f5f5f5);
-  background-image: -o-linear-gradient(#f9f9f9, #f5f5f5);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#f5f5f5', GradientType=0)";
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#f5f5f5', GradientType=0);
-  background-image: linear-gradient(#f9f9f9, #f5f5f5);
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-}
-.getting-started {
-  border-color: #eee;
-}
-.getting-started td {
-  width: 33%;
-  border-right: 1px solid #eee;
-}
-.getting-started td + td {
-  border-left: 1px solid #fff;
-}
-.getting-started td:last-child {
-  border-right: 0;
-}
-.quick-start {
-  padding: 17px 20px;
-}
-.quick-start h3,
-.quick-start p {
+.getting-started h3,
+.getting-started p {
   line-height: 18px;
   text-align: center;
   margin-bottom: 9px;
 }
-.quick-start p {
+.getting-started p {
   color: #777;
 }
-.quick-start .current-version,
-.quick-start .current-version a {
+.getting-started .current-version,
+.getting-started .current-version a {
   color: #999;
 }
-.quick-start form {
+.getting-started form {
   margin-bottom: 0;
 }
-.quick-start textarea {
+.getting-started textarea {
   display: block;
-  width: 100%;
+  width: 95%;
   height: auto;
-  margin-bottom: 0;
-  line-height: 21px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 20px;
   white-space: nowrap;
   overflow: hidden;
+  background-color: #f5f5f5;
   /* Makes inputs behave like true block-level elements */
   -webkit-box-sizing: border-box; /* Older Webkit */
      -moz-box-sizing: border-box; /* Older FF */
       -ms-box-sizing: border-box; /* IE8 */
           box-sizing: border-box; /* CSS3 spec*/
   /* Hacks for IE7 to make this work just okay enough to function */
-  *width: 90%;
+  *width: 80%;
   *height: 24px;
 }
 
@@ -384,10 +464,86 @@ body > .navbar-fixed .brand:hover {
 .popover-well .popover-menu-wrapper {
   height: 80px;
 }
-img.large-bird {
+.large-bird {
   margin: 5px 0 0 310px;
   opacity: .1;
 }
+
+
+/* Download page
+-------------------------------------------------- */
+.download .page-header {
+  margin-top: 36px;
+}
+.page-header .toggle-all {
+  margin-top: 13px;
+}
+
+/* Space out h3s when following a section */
+.download h3 {
+  margin-bottom: 5px;
+}
+.download-builder input + h3,
+.download-builder .checkbox + h3 {
+  margin-top: 9px;
+}
+
+/* Fields for variables */
+.download-builder input[type=text] {
+  margin-bottom: 9px;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-size: 12px;
+  color: #d14;
+}
+.download-builder input[type=text]:focus {
+  background-color: #fff;
+}
+
+/* Custom, larger checkbox labels */
+.download .checkbox {
+  padding: 6px 10px 6px 25px;
+  color: #555;
+  background-color: #f9f9f9;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  cursor: pointer;
+}
+.download .checkbox:hover {
+  color: #333;
+  background-color: #f5f5f5;
+}
+.download .checkbox small {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Giant download button */
+.download-btn {
+  margin: 36px 0 108px.i;
+}
+.download p,
+.download h4 {
+  max-width: 50%;
+  margin: 0 auto 18px;
+  color: #999;
+  text-align: center;
+}
+.download-btn h4 {
+  margin-bottom: 0;
+}
+.btn.xlarge {
+  display: block;
+  width: auto;
+  padding: 19px 24px;
+  margin-bottom: 27px;
+  font-size: 30px;
+  text-align: center;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
 
 
 /* Misc
@@ -403,18 +559,21 @@ pre.prettyprint {
 
 /* Make tables spaced out a bit more */
 h2 + table,
+h3 + table,
+h4 + table,
 h2 + .row {
   margin-top: 5px;
 }
 
 /* Example sites showcase */
 .example-sites img {
-  max-width: 290px;
+  max-width: 100%;
 }
 .marketing-byline {
   margin: -18px 0 27px;
   font-size: 18px;
   font-weight: 300;
+  line-height: 24px;
   color: #999;
   text-align: center;
 }
@@ -427,7 +586,7 @@ h2 + .row {
 
 /* Remove bottom margin on example forms in wells */
 form.well {
-  margin-bottom: 0;
+  padding: 14px;
 }
 
 /* Tighten up spacing */
@@ -466,11 +625,13 @@ form.well {
 /* Icons
 ------------------------- */
 .the-icons {
-  
+  margin-bottom: 18px;
 }
 .the-icons i {
   display: block;
   margin-bottom: 5px;
+}
+.the-icons i:hover {
   background-color: rgba(255,0,0,.25);
 }
 .the-icons i:after {
@@ -478,7 +639,13 @@ form.well {
   content: attr(class);
   font-style: normal;
   margin-left: 20px;
-  width: 100px;
+  width: 140px;
+}
+#javascript input[type=checkbox] {
+  position: relative;
+  top: -1px;
+  display: inline;
+  margin-left: 6px;
 }
 
 
@@ -559,6 +726,28 @@ form.well {
 
 @media (max-width: 768px) {
 
+  /* Subnav */
+  .subnav {
+    position: static;
+    top: auto;
+    z-index: auto;
+    width: auto;
+    height: auto;
+    background: #fff; /* whole background property since we use a background-image for gradient */
+    -webkit-box-shadow: none;
+       -moz-box-shadow: none;
+            box-shadow: none;
+  }
+  .subnav .nav > li {
+    float: none;
+  }
+  .subnav .nav a {
+    border: 0;
+  }
+  .subnav .nav li + li a {
+    border-top: 1px solid #e5e5e5;
+  }
+
   /* Adjust the jumbotron */
   .jumbotron .benefits {
     position: relative;
@@ -579,6 +768,11 @@ form.well {
     margin-bottom: 5px;
   }
 
+  /* Space out the getting started sections */
+  .getting-started .span4 {
+    margin-bottom: 18px;
+  }
+
   /* Unfloat the back to top link in footer */
   .footer .pull-right {
     float: none;
@@ -596,7 +790,6 @@ form.well {
   .jumbotron h1 {
     font-size: 54px;
   }
-
   .jumbotron h1,
   .jumbotron p {
     margin-right: 0;

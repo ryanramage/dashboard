@@ -1,14 +1,16 @@
 // BUTTON STYLES
 // -------------
 
-// Shared colors for buttons and alerts
-.btn,
-.alert-message {
+
+// Colors
+// ------
+
+.btn {
   // Set text color
+  &.primary,
+  &.primary:hover,
   &.danger,
   &.danger:hover,
-  &.error,
-  &.error:hover,
   &.success,
   &.success:hover,
   &.info,
@@ -16,31 +18,60 @@
     text-shadow: 0 -1px 0 rgba(0,0,0,.25);
     color: @white
   }
+  &.primary {
+    .buttonBackground(@primaryButtonBackground, spin(@primaryButtonBackground, 15));
+  }
   // Danger and error appear as red
-  &.danger,
-  &.error {
-    .gradientBar(#ee5f5b, #c43c35);
+  &.danger {
+    .buttonBackground(#ee5f5b, #c43c35);
   }
   // Success appears as green
   &.success {
-    .gradientBar(#62c462, #57a957);
+    .buttonBackground(#62c462, #57a957);
   }
   // Info appears as a neutral blue
   &.info {
-    .gradientBar(#5bc0de, #339bb9);
+    .buttonBackground(#5bc0de, #339bb9);
   }
 }
 
-// Base .btn styles
+
+// Mixin for generating button backgrounds
+// ---------------------------------------
+.buttonBackground(@startColor, @endColor) {
+  // gradientBar will set the background to a pleasing blend of these, to support IE<=9
+  .gradientBar(@startColor, @endColor);
+
+  // in these cases the gradient won't cover the background, so we override
+  &:hover, &:active, &.active, &.disabled {
+    background-color: @endColor;
+  }
+
+  // called out separately because IE8 would ignore otherwise
+  &[disabled] {
+    background-color: @endColor;
+  }
+
+  // IE 7 + 8 can't handle box-shadow to show active, so we darken a bit ourselves
+  &:active,
+  &.active {
+    background-color: darken(@endColor, 10%) e("\9");
+  }
+}
+
+
+// Base styles
+// -----------
+
 .btn {
   // Button Base
   display: inline-block;
-  padding: 5px 10px 6px;
+  padding: 4px 10px 4px;
   font-size: @baseFontSize;
-  line-height: normal;
-  color: #333;
+  line-height: @baseLineHeight;
+  color: @grayDark;
   text-shadow: 0 1px 1px rgba(255,255,255,.75);
-  #gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, darken(#ffffff, 10%)); // Don't use .gradientbar() here since it does a three-color gradient
+  #gradient > .vertical-three-colors(@white, @white, 25%, darken(@white, 10%)); // Don't use .gradientbar() here since it does a three-color gradient
   border: 1px solid #ccc;
   border-bottom-color: #bbb;
   .border-radius(4px);
@@ -51,7 +82,12 @@
   &:hover {
     color: @grayDark;
     text-decoration: none;
+    background-color: darken(@white, 10%);
     background-position: 0 -15px;
+
+    // transition is only when going to hover, otherwise the background
+    // behind the gradient (there for IE<=9 fallback) gets mismatched
+    .transition(background-position .1s linear);
   }
 
   // Focus state for keyboard and accessibility
@@ -59,26 +95,19 @@
     outline: 1px dotted #666;
   }
 
-  // Primary Button Type
-  &.primary {
-    color: @white;
-    text-shadow: 0 -1px 0 rgba(0,0,0,.25);
-    .gradientBar(@blue, @blueDark)
-  }
-
-   // Transitions
-  .transition(.1s linear all);
-
   // Active and Disabled states
   &.active,
   &:active {
-    @shadow: inset 0 2px 4px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.05);
+    background-image: none;
+    @shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
     .box-shadow(@shadow);
+    background-color: darken(@white, 10%);
+    background-color: darken(@white, 15%) e("\9");
   }
   &.disabled {
     cursor: default;
     background-image: none;
-    .reset-filter();
+    background-color: darken(@white, 10%);
     .opacity(65);
     .box-shadow(none);
   }
@@ -87,7 +116,7 @@
     // def because IE8 and below will drop it ;_;
     cursor: default;
     background-image: none;
-    .reset-filter();
+    background-color: darken(@white, 10%);
     .opacity(65);
     .box-shadow(none);
   }
@@ -99,15 +128,17 @@
     line-height: normal;
     .border-radius(5px);
   }
-  &.small {
-    padding: 7px 9px 7px;
-    font-size: @baseFontSize - 2px;
+  &.large .icon {
+    margin-top: 1px;
   }
-}
-// Super jank hack for removing border-radius from IE9 so we can keep filter gradients on alerts and buttons
-:root .alert-message,
-:root .btn {
-  border-radius: 0 \0;
+  &.small {
+    padding: 5px 9px 5px;
+    font-size: @baseFontSize - 2px;
+    line-height: @baseLineHeight - 2px;
+  }
+  &.small .icon {
+    margin-top: -2px;
+  }
 }
 
 // Help Firefox not be a jerk about adding extra padding to buttons

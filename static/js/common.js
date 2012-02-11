@@ -1,3 +1,8 @@
+var dashboard_db_name = 'dashboard';
+jQuery.couch.urlPrefix = '_couch';
+
+
+
 function oneUrl(location) {
     return location.protocol + '//' + location.host ;
 }
@@ -40,10 +45,45 @@ function adjustUIforUser(info, callback) {
 }
 
 
+function getDBSecurity(dbName, callback) {
+    $.couch.db(dbName).getDbProperty("_security", {
+      success: function(r) {
+          callback(null, r);
+      }
+  });
+}
+
+
+function addDBReaderRole(dbName, role, callback) {
+  getDBSecurity(dbName, function(err, sec) {
+      console.log(sec);
+      if (!sec.admins) {
+          sec = {"admins":{"names":[],"roles":[]},"members":{"names":[],"roles":[]}};
+      }
+
+      sec.members.roles.push(role);
+      $.couch.db(dbName).setDbProperty("_security", sec, {
+          success : function() {
+              callback(null);
+          }
+      });
+  });
+}
+
+function updateStatus(msg, percent, complete) {
+    console.log(msg, percent, complete);
+    $('.install-info h4').text(msg);
+    $('.install-info .bar').css('width', percent);
+    if (complete) {
+        $('.install-info .progress').removeClass('active');
+    }
+}
+
+
 
 $(function() {
-    $('#garden-navigation').twipsy({placement: 'right'});
-    $('.help').twipsy({placement: 'bottom'});
+    $('#garden-navigation').tooltip({placement: 'right'});
+    $('.help').tooltip({placement: 'bottom'});
 
 
     $('.modal .cancel').live('click', function() {
@@ -54,8 +94,13 @@ $(function() {
             if (err) return alert('There was a problem logging out');
             adjustUIforUser({});
         });
-
-
     });
+
+    // version info
+    $.getJSON("./_info",  function(data) {
+        $('footer span.version').text(data.version);
+    })
+
+
 
 });
