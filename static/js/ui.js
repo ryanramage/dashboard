@@ -566,7 +566,7 @@ function installApp() {
 }
 
 
-function showLogin() {
+function showLogin(redirect) {
     show('login');
 
     $('#login-btn').click(function() {
@@ -580,11 +580,15 @@ function showLogin() {
                     warning.find('span').text(err.reason);
                     $('#password').val('');
             } else {
+                if (redirect) {
+                    window.location = redirect;
+                } else {
+                    //lame but, we can only get admin names for this.
+                    afterRender(function() {
+                        router.setRoute('/dashboard');
+                    });
+                }
 
-                //lame but, we can only get admin names for this.
-                afterRender(function() {
-                    router.setRoute('/dashboard');
-                });
             }
         });
         return false;
@@ -611,7 +615,15 @@ var routes = {
   '/dashboard/install' : installApp,
   '/sync'   : showSync,
   '/settings'   : showSettings,
-  '/login' : showLogin
+  '/login' : {
+      "/redirect/(.*)" : {
+         on : function(redirect) {
+            redirect = decodeURIComponent(redirect);
+            showLogin(redirect)
+         }
+      },
+      on : showLogin()
+  }
 };
 
 
