@@ -114,10 +114,28 @@ function showApps() {
 
 
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
-        // this is to handle apps that we dont have permissions to
-        $('.thumbnail img').error(function() {
-            $(this).closest('li').remove();
-        });
+
+        // count the thumbnails that get loaded. After all done, and no apps showing, display
+        // a message to login
+        var appAccessCheck = function() {
+            if (loadedApps == 0) {
+                $('.message').html(handlebars.templates['no_apps_access_message.html']({}, {}));
+            }
+        }
+        var loadedApps = 0;
+        var deniedApps = 0;
+        var renderMessage = _.after(data.apps.length, appAccessCheck);
+        $('.thumbnail img')
+            .error(function() {
+                // this is to handle apps that we dont have permissions to
+                deniedApps++;
+                $(this).closest('li').remove();
+                renderMessage();
+            })
+            .load(function() {
+                loadedApps++;
+                renderMessage();
+            });
 
 
 
