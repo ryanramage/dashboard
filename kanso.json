@@ -33,6 +33,7 @@
         "session" : null,
         "users" : null,
         "jsonp": null,
-        "semver" : null
+        "semver" : null,
+        "garden-app-support" : null
     }
 }

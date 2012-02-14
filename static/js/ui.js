@@ -593,7 +593,7 @@ function showLogin(redirect) {
                 } else {
                     //lame but, we can only get admin names for this.
                     afterRender(function() {
-                        router.setRoute('/dashboard');
+                        router.setRoute('/apps');
                     });
                 }
 
@@ -626,7 +626,7 @@ function afterRender(callback) {
 
 
 var routes = {
-  '/dashboard'   : showApps,
+  '/apps'   : showApps,
   '/settings/info/:db' : viewApp,
   '/dashboard/install' : installApp,
   '/sync'   : showSync,
@@ -644,7 +644,7 @@ router.configure({
        afterRender();
    }
 });
-router.init('/dashboard');
+router.init('/apps');
 
 
 
