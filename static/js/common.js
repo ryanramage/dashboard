@@ -92,7 +92,11 @@ $(function() {
 
     // version info
     $.getJSON("./_info",  function(data) {
-        $('footer span.version').text(data.version);
+        var git_rev_small = data.git.commit.substring(0,7);
+        var modified = "";
+        if (data.git.uncommitted && data.git.uncommitted.length > 0) modified = "*";
+        $('footer span.version').text(data.config.version + ':' + git_rev_small + modified);
+
     })
 
 
