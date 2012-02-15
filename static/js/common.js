@@ -13,10 +13,10 @@ function dbRoot(location) {
 
 
 
-function installUrl(location) {
-    var installPath = '/install';
+function thisDashboardUrl(location) {
+    var installPath = '/';
     if (location.pathname.indexOf('_rewrite') >= 0) {
-        installPath = '/dashboard/_design/dashboard/_rewrite/install'
+        installPath = '/dashboard/_design/dashboard/_rewrite/'
     }
     return oneUrl(location) + installPath;
 }
@@ -24,7 +24,7 @@ function installUrl(location) {
 
 
 function addDashboardUrl(data) {
-    var dashboardUrl = installUrl(window.location);
+    var dashboardUrl = thisDashboardUrl(window.location);
     data.gardens = _.map(data.gardens, function(row) {
        row.url = row.url + '?dashboard=' + dashboardUrl;
        return row;
