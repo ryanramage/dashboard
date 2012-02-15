@@ -498,7 +498,7 @@ function showSettings() {
 
         // dashboard version info
         $.getJSON("./_info",  function(data) {
-            var ourVersion = data.version;
+            var ourVersion = data.config.version;
 
             $('.update-board tr.dashboard td.installed-version').html(ourVersion);
 
@@ -507,14 +507,13 @@ function showSettings() {
                 dataType : 'json',
                 jsonp : true,
                 success : function(remote_data) {
-                    var currentVersion = remote_data.version;
+                    var currentVersion = remote_data.config.version;
                     $('.update-board tr.dashboard td.available-version').html(currentVersion);
                     if (semver.lt(ourVersion, currentVersion )) {
                         $('.update-board tr.dashboard div.update-action').show();
                     }
                 },
                 error : function() {
-
                 }
             });
         });
