@@ -12,6 +12,8 @@ function dbRoot(location) {
 }
 
 
+
+
 function addDashboardUrl(data) {
     var dashboardUrl = oneUrl(window.location);
     data.gardens = _.map(data.gardens, function(row) {
@@ -30,15 +32,7 @@ function adjustUIforUser(info, callback) {
             $('.admin-only').show();
         }
 
-        var isUser = userType.isUser(info);
-        if (isUser) {
-            $('.user').show();
-            $('.username').text(userType.getUsername(info));
-            $('.login').hide();
-        } else {
-            $('.user').hide();
-            $('.login').show();
-        }
+
         if (callback) callback();
 
 
@@ -98,7 +92,11 @@ $(function() {
 
     // version info
     $.getJSON("./_info",  function(data) {
-        $('footer span.version').text(data.version);
+        var git_rev_small = data.git.commit.substring(0,7);
+        var modified = "";
+        if (data.git.uncommitted && data.git.uncommitted.length > 0) modified = "*";
+        $('footer span.version').text(data.config.version + ':' + git_rev_small + modified);
+
     })
 
 

@@ -114,10 +114,28 @@ function showApps() {
 
 
         $('.app').html(handlebars.templates['app_list.html'](data, {}));
-        // this is to handle apps that we dont have permissions to
-        $('.thumbnail img').error(function() {
-            $(this).closest('li').remove();
-        });
+
+        // count the thumbnails that get loaded. After all done, and no apps showing, display
+        // a message to login
+        var appAccessCheck = function() {
+            if (loadedApps == 0) {
+                $('.message').html(handlebars.templates['no_apps_access_message.html']({}, {}));
+            }
+        }
+        var loadedApps = 0;
+        var deniedApps = 0;
+        var renderMessage = _.after(data.apps.length, appAccessCheck);
+        $('.thumbnail img')
+            .error(function() {
+                // this is to handle apps that we dont have permissions to
+                deniedApps++;
+                $(this).closest('li').remove();
+                renderMessage();
+            })
+            .load(function() {
+                loadedApps++;
+                renderMessage();
+            });
 
 
 
@@ -566,11 +584,16 @@ function installApp() {
 }
 
 
-function showLogin() {
+function showLogin(redirect) {
     show('login');
 
+    var stored_user = amplify.store('user');
+    if (stored_user) {
+        $('#email').val(stored_user);
+    }
+
     $('#login-btn').click(function() {
-        var username = $('#username').val();
+        var username = $('#email').val();
         var password = $('#password').val();
         session.login(username, password, function (err, info) {
             if (err) {
@@ -580,11 +603,18 @@ function showLogin() {
                     warning.find('span').text(err.reason);
                     $('#password').val('');
             } else {
+                amplify.store('user', username);
 
-                //lame but, we can only get admin names for this.
-                afterRender(function() {
-                    router.setRoute('/dashboard');
-                });
+                if (redirect) {
+                    redirect = decodeURIComponent(redirect);
+                    window.location = redirect;
+                } else {
+                    //lame but, we can only get admin names for this.
+                    afterRender(function() {
+                        router.setRoute('/apps');
+                    });
+                }
+
             }
         });
         return false;
@@ -592,9 +622,17 @@ function showLogin() {
     
 }
 
+function logout() {
+    session.logout(function(err, response) {
+        if (err) return alert('Cant Logout');
+        router.setRoute('/login');
+    });
+}
 
-
-
+function showProfile(username) {
+    username = decodeURIComponent(username);
+    console.log(username);
+}
 
 
 function afterRender(callback) {
@@ -606,12 +644,15 @@ function afterRender(callback) {
 
 
 var routes = {
-  '/dashboard'   : showApps,
+  '/apps'   : showApps,
   '/settings/info/:db' : viewApp,
   '/dashboard/install' : installApp,
   '/sync'   : showSync,
   '/settings'   : showSettings,
-  '/login' : showLogin
+  '/login/redirect/(.*)' : showLogin,
+  '/login' : showLogin,
+  '/profile/(.*)' : showProfile,
+  '/logout' : logout
 };
 
 
@@ -621,7 +662,7 @@ router.configure({
        afterRender();
    }
 });
-router.init('/dashboard');
+router.init('/apps');
 
 
 

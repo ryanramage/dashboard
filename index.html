@@ -3,43 +3,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="static/css/main.css" />
-    <link rel="shortcut icon" href="static/img/kanso_icon_20.png" />
-    <title>Garden Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="static/css/garden-app.css" />
+    <link rel="shortcut icon" href="static/img/dashboard-icon.png" />
+    <title>Dashboard</title>
   </head>
   <body>
 
+
     <div class="navbar navbar-static">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container garden-app">
             
             <a class="brand" href="#">
-                 <span class="brand-colour">Garden</span>20
+                 <span class="brand-colour">Dashboard</span>
             </a>
             <ul class="nav">
               <li class="apps active">
-                <a href="#/dashboard">Dashboard</a>
+                <a href="#/apps">Apps</a>
               </li>
-              <li class="install"><a href="./install">Install Apps</a></li>
+              <li class="install"><a href="./install">Install</a></li>
               <li class="sync"><a href="#/sync">Sync</a></li>
               <li class="settings admin-only" style="display: none;" ><a href="#/settings">Settings</a></li>
             </ul>
-            <div class="pull-right seperator">
-                <a  href="/dashboard/_design/dashboard/_rewrite/" class="help home-icon"  title="Garden Dashboard" ></a>
-            </div>
 
-
-            <ul class="pull-right nav">
-                <li class="login"  style="display: none;"><a href="#/login">Login</a></li>
-                <li class="dropdown user" style="display: none;">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="username">&nbsp;</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                       <li class="logout"><a href="#">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
       </div>
      </div>
     </div>
@@ -79,7 +65,7 @@
     <script type="text/javascript" src="static/js/lib/jquery-ui-1.8.5.custom.min.js"></script>
     <script type="text/javascript" src="static/js/lib/jquery.couch.js"></script>
     <script type="text/javascript" src="static/js/lib/amplify.min.js"></script>
-    <script type="text/javascript" src="static/js/lib/director-1.0.7.min.js"></script>
+    <script type="text/javascript" src="static/js/lib/director-1.0.8.min.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-tooltip.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-popover.js"></script>
     <script type="text/javascript" src="static/js/lib/bootstrap-alert.js"></script>
@@ -90,6 +76,7 @@
     <script type="text/javascript" src="static/js/lib/moment.min.js"></script>
     <script type="text/javascript" src="static/js/lib/System.js"></script>
     <script type="text/javascript" src="modules.js"></script>
+    <script type="text/javascript" src="static/js/jquery.garden-app.js"></script>
     <script type="text/javascript" src="static/js/common.js"></script>
     <script type="text/javascript" src="static/js/ui.js"></script>
 
