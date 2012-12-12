@@ -9,4 +9,4 @@ services:
 script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
-  - ps -A
+  - ps -Al
