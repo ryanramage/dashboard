@@ -10,7 +10,7 @@ script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
   - uname -a
-  - ls -al /var/lib/couchdb/
+  - sudo ls -al /var/lib/couchdb/
   - sudo ps -Al
   - whereis couchdb
   - ls -al /usr/lib/couchdb
