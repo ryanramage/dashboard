@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/ryanramage/garden-dashboard.png)](http://travis-ci.org/ryanramage/garden-dashboard)
+[![Build Status](https://secure.travis-ci.org/ryanramage/dashboard.png)](http://travis-ci.org/ryanramage/dashboard)
 
 ## The Garden Project
 
