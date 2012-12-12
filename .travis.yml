@@ -10,3 +10,5 @@ script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
   - ps -Al
+  - readlink /proc/$(pgrep -n couchdb)/cwd
+  - readlink /proc/$(pgrep -n beam)/cwd
