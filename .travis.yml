@@ -10,4 +10,5 @@ script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
   - sudo cp /var/lib/couchdb/1.2.0/myapp_test.couch .
+  - sudo chown travis myapp_test.couch
   - ls -al
