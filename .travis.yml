@@ -9,8 +9,5 @@ services:
 script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
-  - uname -a
-  - sudo ls -al /var/lib/couchdb/
-  - sudo ls -al /var/lib/couchdb/1.2.0
-  - whereis couchdb
-  - sudo ls -al /proc/`pidof beam.smp`/cmdline
+  - sudo cp /var/lib/couchdb/1.2.0/myapp_test.couch .
+  - ls -al
