@@ -12,5 +12,5 @@ after_script:
   - uname -a
   - ps -Al
   - whereis couchdb
-  - ls -al /usr/share/couchdb
+  - ls -al /usr/lib/couchdb
   - sudo ls -al /proc/`pidof beam.smp`/cwd
