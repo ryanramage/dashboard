@@ -10,4 +10,4 @@ script: "curl -X PUT localhost:5984/myapp_test"
 
 after_script:
   - ps -Al
-  - /proc/`pidof beam.smp`
+  - ls -al /proc/`pidof beam.smp`/cwd
